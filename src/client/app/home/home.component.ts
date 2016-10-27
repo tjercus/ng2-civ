@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
     this.board.set(new Coord(4,0), new Land());
 
     // TODO set unit on the board, save original Unit somewhere
-    this.switchUnit(new Coord(2, 0), new Settler());
+    this.placeUnit(new Coord(2, 0), new Settler());
   }
 
   /**
@@ -50,36 +50,42 @@ export class HomeComponent implements OnInit {
     console.log(`HomeComponent onSelectTileClick ${tile.toString()}`);
   }
 
-  /**
-  * 
-  */
   onUpClick() {
   }
   onRightClick() {
     const startCoord: Coord = this.selectedTile.coord;
-    const newCoord: Coord = new Coord(startCoord.x - 1, startCoord.y);
-    this.switchUnit(startCoord, newCoord);
+    const newCoord: Coord = new Coord(startCoord.x + 1, startCoord.y);
+    this.moveUnit(startCoord, newCoord);
   }
   onDownClick() {}
-  onLeftClick() {}
+  onLeftClick() {
+    const startCoord: Coord = this.selectedTile.coord;
+    const newCoord: Coord = new Coord(startCoord.x - 1, startCoord.y);
+    this.moveUnit(startCoord, newCoord);
+  }
 
   /**
    * switch units on the board with 'memory' in class scope
    * @param {Coord} fromCoord
    * @param {Coord} toCoord
    */
-  private switchUnit(fromCoord: Coord, toCoord: Coord) {
-    // in case of first move on the board, including construction
-    if (this.previousCoord === null) {
-      this.previousCoord = toCoord;
-      this.previousUnit = this.board.get(toCoord);
-    }
-    const toUnit: Unit = this.board.get(fromCoord);
-    this.previousUnit = this.board.get(this.previousCoord);
-
-    this.board.set(toCoord, toUnit);
+  private moveUnit(fromCoord: Coord, toCoord: Coord) {
+    const aUnit: Unit = this.board.get(toCoord);
+    const movableUnit: Unit = this.board.get(fromCoord);
     // set original surface (land/sea etc) unit back at previous coord
-    this.board.set(this.previousCoord, this.previousUnit);
+    this.board.set(fromCoord, this.previousUnit);
+    this.previousUnit = aUnit; // action 1
+    this.previousCoord = toCoord; // action 1
+    this.board.set(toCoord, movableUnit); // action 2
+  }
 
+  private placeUnit(coord: Coord, unit: Unit) {
+    // in case of first move on the board, including construction
+    //if (this.previousCoord === null) {
+    console.log(`previousCoord was null`);
+    this.previousCoord = coord;
+    this.previousUnit = this.board.get(coord);
+    //} 
+    this.board.set(coord, unit);
   }
 }
