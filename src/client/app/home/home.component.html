@@ -1,10 +1,18 @@
 <p>Grid with tiles</p>
 
-<h2>Entries:</h2>
+<h2>World</h2>
 
 <ul>
-	<li *ngFor="let unit of tiles | mapValues">{{unit.name}}</li>
+	<li *ngFor="let tile of tiles | unitToTile"
+      class="tile" (click)="onSelectUnitClick(tile)">
+    {{tile.toString()}}
+  </li>
 </ul>
 
-<button (click)="onUpClick()">move up</button>
+<nav class="buttonbar">
+  <button (click)="onUpClick()">move up</button>
+  <button (click)="onRightClick()">move right</button>
+  <button (click)="onDownClick()">move down</button>
+  <button (click)="onLeftClick()">move left</button>
+</nav>
 
