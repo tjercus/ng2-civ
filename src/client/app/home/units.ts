@@ -1,6 +1,7 @@
 // units.ts 
 
 import {Coord} from "./world";
+
 export class Unit implements Mappable {
   name: string;
   constructor() {
