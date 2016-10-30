@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {Unit, Settler, City} from "./units";
 import {Coord, Land, Sea, Tile, Surface} from "./world";
 //import {Map} from "immutable";
+
+function clone(obj) {
+   return JSON.parse(JSON.stringify(obj));
+}
+
 /**
  * This class represents the lazy loaded HomeComponent.
  */
@@ -23,15 +28,7 @@ export class HomeComponent implements OnInit {
   /**
    *
    */
-  constructor() {
-    this.board.set(Coord.create(0,0).valueOf(), Tile.create(Coord.create(0,0), new Land()));
-    this.board.set(Coord.create(1,0).valueOf(), Tile.create(Coord.create(1,0), new Land()));
-    this.board.set(Coord.create(2,0).valueOf(), Tile.create(Coord.create(2,0), new Land()));
-    this.board.set(Coord.create(3,0).valueOf(), Tile.create(Coord.create(3,0), new Land()));
-    this.board.set(Coord.create(4,0).valueOf(), Tile.create(Coord.create(4,0), new Land()));
-
-    // TODO set unit on the board, save original Unit somewhere
-    this.placeUnit(Coord.create(2,0), new Settler());
+  constructor(private cdr:ChangeDetectorRef) {
 
     //const key1: Coord = new Coord(2,0);
     //const key2: Coord = new Coord(2,0);
@@ -57,6 +54,14 @@ export class HomeComponent implements OnInit {
    * Get the names OnInit
    */
   ngOnInit() {
+    this.board.set(Coord.create(0,0).valueOf(), Tile.create(Coord.create(0,0), new Land()));
+    this.board.set(Coord.create(1,0).valueOf(), Tile.create(Coord.create(1,0), new Land()));
+    this.board.set(Coord.create(2,0).valueOf(), Tile.create(Coord.create(2,0), new Land()));
+    this.board.set(Coord.create(3,0).valueOf(), Tile.create(Coord.create(3,0), new Land()));
+    this.board.set(Coord.create(4,0).valueOf(), Tile.create(Coord.create(4,0), new Land()));
+
+    // TODO set unit on the board, save original Unit somewhere
+    this.placeUnit(Coord.create(2,0), new Settler());
   }
 
   onSelectTileClick(tile: Tile) {
@@ -68,14 +73,13 @@ export class HomeComponent implements OnInit {
   }
   onRightClick() {
     if (this.selectedTile) {
-      // TODO fix
-      const startCoord: Coord = this.selectedTile.coord;
-      console.log(`onRightClick ${startCoord}`);
-      const newX = startCoord.x + 1;
-      const newY = startCoord.y;
+      // TODO extract method calculateCoord
+      console.log(`onRightClick ${this.selectedTile.coord}`);
+      const newX = this.selectedTile.coord.x + 1;
+      const newY = this.selectedTile.coord.y;
       console.log(`new coords for move right [${newX}][${newY}]`);
       const newCoord: Coord = Coord.create(newX, newY);
-      this.moveUnit(startCoord, newCoord);
+      this.moveUnit(this.selectedTile, newCoord);
     } else {
       console.log("no move without a selected tile");
     }
@@ -96,16 +100,19 @@ export class HomeComponent implements OnInit {
    * @param {Coord} fromCoord
    * @param {Coord} toCoord
    */
-  private moveUnit(fromCoord: Coord, toCoord: Coord) {
+  private moveUnit(tile: Tile, toCoord: Coord) {
     // TODO guard clause for bordercontrol
-    console.log(`moveUnit ${fromCoord} to ${toCoord}`);
-    const fromTile: Tile = this.board.get(fromCoord.valueOf());
+    console.log(`moveUnit ${tile.coord} to ${toCoord}`);
     const toTile: Tile = this.board.get(toCoord.valueOf());
-    const unit: Unit = fromTile.unit;
-    fromTile.unit = null;
+    const unit: Unit = clone(tile.unit);
     toTile.unit = unit;
-    this.board.set(fromCoord.valueOf(), fromTile);
+    tile.unit = null;
+    this.board.set(tile.coord.valueOf(), tile);
     this.board.set(toCoord.valueOf(), toTile);
+    console.log(`toTile is ${JSON.stringify(toTile)}`);
+    console.log("moveUnit, world after:");
+    console.dir(this.board);
+    this.cdr.detectChanges();
   }
 
   private placeUnit(coord: Coord, unit: Unit) {
@@ -115,5 +122,5 @@ export class HomeComponent implements OnInit {
     this.board.set(coord.valueOf(), tile);
     console.dir(this.board);
     //this.board.set(Coord.create(5,0).valueOf(), Tile.create(Coord.create(5,0), new Sea()));
-  }
+  } 
 }

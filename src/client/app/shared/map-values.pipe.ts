@@ -14,7 +14,7 @@ export class MapValuesPipe implements PipeTransform {
       // });
       returnArray.push(Tile.create(entryVal.coord, entryVal.surface, entryVal.unit));
     });
-
+    console.log("pipe: mapToTile was executed");
     return returnArray;
   }
 }
