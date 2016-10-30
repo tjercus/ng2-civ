@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Unit, Land, Sea, Settler, Tile} from "./units";
-import {Coord} from "./world";
+import {Unit, Settler, City} from "./units";
+import {Coord, Land, Sea, Tile, Surface} from "./world";
 //import {Map} from "immutable";
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -17,23 +17,18 @@ export class HomeComponent implements OnInit {
   // errorMessage: string;
   // x = horizontal
   // y = vertical
-  board: Map<String, Unit> = new Map<String, Unit>();
+  board: Map<String, Tile> = new Map<String, Tile>();
   selectedTile: Tile = null;
-
-  // remember what is beneath the current coord of Settler
-  //previousUnit: = null;
-  private previousCoord: Coord = null;
-  private previousUnit: Unit = null;
 
   /**
    *
    */
   constructor() {
-    this.board.set(Coord.create(0,0).valueOf(), new Land());
-    this.board.set(Coord.create(1,0).valueOf(), new Land());
-    this.board.set(Coord.create(2,0).valueOf(), new Land());
-    this.board.set(Coord.create(3,0).valueOf(), new Land());
-    this.board.set(Coord.create(4,0).valueOf(), new Land());
+    this.board.set(Coord.create(0,0).valueOf(), Tile.create(Coord.create(0,0), new Land()));
+    this.board.set(Coord.create(1,0).valueOf(), Tile.create(Coord.create(1,0), new Land()));
+    this.board.set(Coord.create(2,0).valueOf(), Tile.create(Coord.create(2,0), new Land()));
+    this.board.set(Coord.create(3,0).valueOf(), Tile.create(Coord.create(3,0), new Land()));
+    this.board.set(Coord.create(4,0).valueOf(), Tile.create(Coord.create(4,0), new Land()));
 
     // TODO set unit on the board, save original Unit somewhere
     this.placeUnit(Coord.create(2,0), new Settler());
@@ -54,6 +49,10 @@ export class HomeComponent implements OnInit {
     */
   }
 
+  // getKeyByValue(map: Map<String, Object>, value: string) {
+  //   return map.keys.find(key => map[key] === value);
+  // }
+
   /**
    * Get the names OnInit
    */
@@ -69,6 +68,7 @@ export class HomeComponent implements OnInit {
   }
   onRightClick() {
     if (this.selectedTile) {
+      // TODO fix
       const startCoord: Coord = this.selectedTile.coord;
       console.log(`onRightClick ${startCoord}`);
       const newX = startCoord.x + 1;
@@ -82,36 +82,38 @@ export class HomeComponent implements OnInit {
   }
   onDownClick() {}
   onLeftClick() {
-    if (this.selectedTile) {
-      const startCoord: Coord = this.selectedTile.coord;
-      const newCoord: Coord = Coord.create(startCoord.x - 1, startCoord.y);
-      this.moveUnit(startCoord, newCoord);
-    } else {
-      console.log("no move without a selected tile");
-    }
+    // if (this.selectedTile) {
+    //   const startCoord: Coord = this.selectedTile.coord;
+    //   const newCoord: Coord = Coord.create(startCoord.x - 1, startCoord.y);
+    //   this.moveUnit(startCoord, newCoord);
+    // } else {
+    //   console.log("no move without a selected tile");
+    // }
   }
 
   /**
-   * switch units on the board with 'memory' in class scope
+   * move a unit from one tile to another on the board
    * @param {Coord} fromCoord
    * @param {Coord} toCoord
    */
   private moveUnit(fromCoord: Coord, toCoord: Coord) {
+    // TODO guard clause for bordercontrol
     console.log(`moveUnit ${fromCoord} to ${toCoord}`);
-    const aUnit: Unit = this.board.get(toCoord.valueOf());
-    const movableUnit: Unit = this.board.get(fromCoord.valueOf());
-    // set original surface (land/sea etc) unit back at previous coord
-    this.board.set(fromCoord.valueOf(), this.previousUnit);
-    this.previousUnit = aUnit; // action 1
-    this.previousCoord = toCoord; // action 1
-    this.board.set(toCoord.valueOf(), movableUnit); // action 2
+    const fromTile: Tile = this.board.get(fromCoord.valueOf());
+    const toTile: Tile = this.board.get(toCoord.valueOf());
+    const unit: Unit = fromTile.unit;
+    fromTile.unit = null;
+    toTile.unit = unit;
+    this.board.set(fromCoord.valueOf(), fromTile);
+    this.board.set(toCoord.valueOf(), toTile);
   }
 
   private placeUnit(coord: Coord, unit: Unit) {
     console.log(`placeUnit ${unit} @ ${coord}`);
-    this.previousCoord = coord;
-    this.previousUnit = this.board.get(coord.valueOf());
-    this.board.set(coord.valueOf(), unit);
+    const tile: Tile = this.board.get(coord.valueOf());
+    tile.unit = unit;
+    this.board.set(coord.valueOf(), tile);
     console.dir(this.board);
+    //this.board.set(Coord.create(5,0).valueOf(), Tile.create(Coord.create(5,0), new Sea()));
   }
 }

@@ -1,18 +1,18 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Coord} from "../home/world";
-import {Unit, Tile} from "../home/units";
+import {Coord, Tile} from "../home/world";
 
-@Pipe({name: 'unitToTile'})
+
+@Pipe({name: 'mapToTile'})
 export class MapValuesPipe implements PipeTransform {
-  transform(value: Map<Coord, Unit>, args?: Array<Object>): Array<Tile> {
-    let returnArray: Array<Tile> = [];
+  transform(value: Map<String, Tile>, args?: Array<Object>): Array<Tile> {
+    let returnArray: Array<Tile> = new Array<Tile>();
 
     value.forEach((entryVal, entryKey) => {
       // returnArray.push({
       //   key: entryKey,
       //   val: entryVal
       // });
-      returnArray.push(new Tile(entryKey, entryVal));
+      returnArray.push(Tile.create(entryVal.coord, entryVal.surface, entryVal.unit));
     });
 
     return returnArray;
