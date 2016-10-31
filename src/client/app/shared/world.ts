@@ -1,4 +1,5 @@
 import {Unit} from "./units";
+import {Direct} from "protractor/built/driverProviders";
 
 // function clone(obj:any) {
 //   return JSON.parse(JSON.stringify(obj));
@@ -27,7 +28,7 @@ export class Board {
    * @param coord
    * @param unit
    */
-  public placeUnit(coord: Coord, unit: Unit) {
+  public placeUnit(coord: Coord, unit: Unit): void {
     console.log(`Board.placeUnit ${unit} @ ${coord}`);
     const tile: Tile = this._tiles.get(coord.valueOf());
     tile.unit = unit;
@@ -42,7 +43,11 @@ export class Board {
    * @throws {MoveException} ex
    */
   public moveUnit(tile: Tile, direction: Direction): Tile {
-    // TODO guard clause for 'no unit on tile'
+    // guard clause for 'no unit on tile'
+    if (tile === undefined || tile === null) {
+      console.log("moveUnit says you need to select a unit");
+      return;
+    }
     // TODO guard clause for bordercontrol
     const newCoord: Coord = Coord.createInDirection(tile.coord, direction);
     const toTile: Tile = this._tiles.get(newCoord.valueOf());
@@ -56,6 +61,10 @@ export class Board {
 
   public get tiles(): Array<Tile> {
     return Array.from(this._tiles.values());
+  }
+
+  public findTile(coord: Coord): Tile {
+    return this._tiles.get(coord.valueOf());
   }
 
   private createLandTile(x: number, y: number): Tile {
@@ -91,17 +100,30 @@ export class Coord {
     return Coord.create(parseInt(arr[0]), parseInt(arr[1]));
   }
 
+  /**
+   * Create a Coord based on another Coord and a Direction
+   * @param {Coord} coord
+   * @param {Direction} direction
+   * @returns {Coord} calculated Coord
+   */
   static createInDirection(coord: Coord, direction: Direction): Coord {
     let newX = coord.x;
     let newY = coord.y;
-    if (direction === Direction.Right) {
-      newX = coord.x + 1;
-      console.log(`new coords for move right [${newX}][${newY}]`);
+    switch (direction) {
+      case Direction.Up:
+        newY = coord.x - 1;
+      break;
+      case Direction.Right:
+        newX = coord.x + 1;
+      break;
+      case Direction.Down:
+        newY = coord.x + 1;
+      break;
+      case Direction.Left:
+        newX = coord.x - 1;
+      break;
     }
-    if (direction === Direction.Left) {
-      newX = coord.x - 1;
-      console.log(`new coords for move left [${newX}][${newY}]`);
-    }
+    console.log(`new coords for move ${direction} are [${newX}][${newY}]`);
     return Coord.create(newX, newY);
   }
 

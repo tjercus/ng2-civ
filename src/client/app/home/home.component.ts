@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   public tiles: Array<Tile> = [];
 
   private selectedTile: Tile = null;
-  private board: Board; // TODO use as a properly observed angular service
+  private board: Board; // TODO use as a properly observed angular service?
 
   constructor(private cdr:ChangeDetectorRef) {}
 
@@ -42,22 +42,15 @@ export class HomeComponent implements OnInit {
   }
 
   onUpClick() {
+    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Up);
   }
-
   onRightClick() {
-    if (this.selectedTile) {
-      // TODO move exception/error handling into function
-      this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Right);
-    } else {
-      console.log("no move without a selected tile");
-    }
+    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Right);
   }
-  onDownClick() {}
+  onDownClick() {
+    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Down);
+  }
   onLeftClick() {
-    if (this.selectedTile) {
-      this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Left);
-    } else {
-      console.log("no move without a selected tile");
-    }
+    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Left);
   }
 }

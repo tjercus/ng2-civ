@@ -10,3 +10,20 @@ In order to start the seed use:
 
 # to start deving with livereload site and coverage as well as continuous testing
 npm run start.deving
+
+## TODO
+ - Color Land and Sea
+ - Land units should not move on Sea
+ - Sea units should not move on Land
+ - Introduce Road
+ - Introduce Railroad
+ - Introduce a dashboard with context actions for a Settler
+ - Introduce Turns
+ - Land units should be able to move more than one square per turn
+ - Support Mountains
+ - Use Icons for Surfaces and Units
+ - Introduce City Unit
+ - Introduce multiple Units per Board and Turn
+ - Introduce Hitpoints
+ - Introduce Health
+ - Introduce Attack
