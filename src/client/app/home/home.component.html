@@ -4,7 +4,9 @@
 
 <ul class="board">
 	<li *ngFor="let tile of tiles"
-     class="tile" (click)="onSelectTileClick(tile)">
+      [class.tile]="!isSelected(tile)"
+      [class.tile-selected]="isSelected(tile)"
+      (click)="onSelectTileClick(tile)">
     {{tile.toString()}}
   </li>
 </ul>

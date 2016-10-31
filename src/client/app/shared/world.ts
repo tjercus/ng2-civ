@@ -44,27 +44,13 @@ export class Board {
   public moveUnit(tile: Tile, direction: Direction): Tile {
     // TODO guard clause for 'no unit on tile'
     // TODO guard clause for bordercontrol
-    let newX = tile.coord.x;
-    let newY = tile.coord.y;
-    if (direction === Direction.Right) {
-      newX = tile.coord.x + 1;
-      console.log(`new coords for move right [${newX}][${newY}]`);
-    }
-    if (direction === Direction.Left) {
-      newX = tile.coord.x - 1;
-      console.log(`new coords for move left [${newX}][${newY}]`);
-    }
-    const newCoord: Coord = Coord.create(newX, newY);
-
-    console.log(`Board.moveUnit ${tile.coord} to ${newCoord}`);
+    const newCoord: Coord = Coord.createInDirection(tile.coord, direction);
     const toTile: Tile = this._tiles.get(newCoord.valueOf());
     toTile.unit = tile.unit;
     tile.unit = null;
     this._tiles.set(tile.coord.valueOf(), tile);
     this._tiles.set(newCoord.valueOf(), toTile);
-    console.log(`Board.toTile is ${JSON.stringify(toTile)}`);
-    console.log("Board.moveUnit, world after:");
-    console.dir(this._tiles);
+    //console.dir(this._tiles);
     return toTile;
   }
 
@@ -105,6 +91,20 @@ export class Coord {
     return Coord.create(parseInt(arr[0]), parseInt(arr[1]));
   }
 
+  static createInDirection(coord: Coord, direction: Direction): Coord {
+    let newX = coord.x;
+    let newY = coord.y;
+    if (direction === Direction.Right) {
+      newX = coord.x + 1;
+      console.log(`new coords for move right [${newX}][${newY}]`);
+    }
+    if (direction === Direction.Left) {
+      newX = coord.x - 1;
+      console.log(`new coords for move left [${newX}][${newY}]`);
+    }
+    return Coord.create(newX, newY);
+  }
+
   public equals(otherCoord: Coord): boolean {
     return (this.x === otherCoord.x && this.y === otherCoord.y);
   }
@@ -122,7 +122,7 @@ export class Coord {
 }
 
 /**
- * Wraps a Unit and its Coordinates
+ * Wraps a Unit and its Coordinates, has a Surface
  */
 export class Tile {
   public coord: Coord;
@@ -137,12 +137,9 @@ export class Tile {
   static create(coord: Coord, surface: Surface, unit?: Unit): Tile {
     return new Tile(coord, surface, unit);
   }
-  // public void setUnit(unit: Unit): void {
-  //   this.unit = unit;
-  // }
-  // public void setCoord(coord: Coord): void {
-  //   this.coord = coord;
-  // }
+  public equals(anotherTile: Tile): boolean {
+    return this.coord.equals(anotherTile.coord);
+  }
   public toString() : string {
     return `[${this.coord}] has ${this.unit || "no unit"}`;
   }
@@ -155,7 +152,6 @@ export interface Surface {
   name: string;
 }
 
-// Or: implements Mappable extends Unit
 export class Land implements Surface {
   public name: string;
   constructor() {

@@ -23,13 +23,17 @@ export class HomeComponent implements OnInit {
   constructor(private cdr:ChangeDetectorRef) {}
 
   /**
-   * Get the names OnInit
+   * Get the board OnInit
    */
   ngOnInit() {
     this.board = new Board(5);
     this.tiles = this.board.tiles;
 
     this.board.placeUnit(Coord.create(2,0), new Settler());
+  }
+
+  isSelected(tile: Tile): boolean {
+    return this.selectedTile !== null && this.selectedTile.equals(tile);
   }
 
   onSelectTileClick(tile: Tile) {
