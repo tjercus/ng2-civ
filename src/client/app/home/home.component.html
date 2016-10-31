@@ -4,12 +4,16 @@
 
 <ul class="board">
 	<li *ngFor="let tile of tiles"
-      [class.tile]="!isSelected(tile)"
-      [class.tile-selected]="isSelected(tile)"
+      [ngClass]="setCssClasses(tile)"
       (click)="onSelectTileClick(tile)">
     {{tile.toString()}}
   </li>
 </ul>
+
+<!--
+  [class.tile]="!isSelected(tile)"
+  [class.tile-selected]="isSelected(tile)"
+-->
 
 <nav class="buttonbar">
   <button (click)="onUpClick()">move up</button>

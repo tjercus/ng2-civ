@@ -15,7 +15,7 @@ ul {
 .tiles .tile {
 
 }
-.tile, .tile-selected {
+.tile, .tile-selected, .surface-land, .surface-sea {
   display: inline-block;
   border: 1px solid silver;
   height: 5em;
@@ -26,11 +26,14 @@ ul {
 }
 
 .tile-selected {
-  border: 3px solid silver;
+  border: 2px solid black;
 }
 
-.land {
+.surface-land {
   background-color: LightGreen;
+}
+.surface-sea {
+  background-color: LightBlue;
 }
 
 .buttonbar {

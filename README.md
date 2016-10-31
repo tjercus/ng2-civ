@@ -12,7 +12,6 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
- - Color Land and Sea
  - Land units should not move on Sea
  - Sea units should not move on Land
  - Introduce Road

@@ -32,6 +32,14 @@ export class HomeComponent implements OnInit {
     this.board.placeUnit(Coord.create(2,0), new Settler());
   }
 
+  setCssClasses(tile: Tile) {
+    return {
+      "tile-selected": this.isSelected(tile),
+      "surface-sea": tile.surface.name === "Sea",
+      "surface-land": tile.surface.name === "Land",
+    }
+  }
+
   isSelected(tile: Tile): boolean {
     return this.selectedTile !== null && this.selectedTile.equals(tile);
   }

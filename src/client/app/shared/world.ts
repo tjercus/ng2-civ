@@ -18,8 +18,12 @@ export class Board {
    * @param {number} boardSize
    */
   constructor(boardSize: number) {
-    for (let i = 0; i < boardSize; i++) {
+    let i = 0;
+    for (;i < boardSize; i++) {
       this._tiles.set(Coord.create(i, 0).valueOf(), this.createLandTile(i, 0));
+    }
+    for (;i < boardSize + 5; i++) {
+      this._tiles.set(Coord.create(i, 0).valueOf(), this.createSeaTile(i, 0));
     }
   }
 
@@ -46,7 +50,7 @@ export class Board {
     // guard clause for 'no unit on tile'
     if (tile === undefined || tile === null) {
       console.log("moveUnit says you need to select a unit");
-      return;
+      throw new Error("moveUnit says you need to select a unit");
     }
     // TODO guard clause for bordercontrol
     const newCoord: Coord = Coord.createInDirection(tile.coord, direction);
@@ -69,6 +73,9 @@ export class Board {
 
   private createLandTile(x: number, y: number): Tile {
     return Tile.create(Coord.create(x, y), new Land());
+  }
+  private createSeaTile(x: number, y: number): Tile {
+    return Tile.create(Coord.create(x, y), new Sea());
   }
 }
 
