@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Coord, Tile} from "../home/world";
+import {Coord, Tile} from "./world";
 
 
 @Pipe({name: 'mapToTile'})

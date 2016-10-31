@@ -1,6 +1,6 @@
 // units.ts 
 
-import {Coord} from "./world";
+//import {Coord} from "./world";
 
 export interface Movable {
   // TODO
@@ -18,10 +18,16 @@ export class Unit {
 }
 
 export class City extends Unit {
-  constructor() { super(); this. name = "City"; };
+  constructor() {
+    super();
+    this.name = "City";
+  }
 }
 
 export class Settler extends Unit  implements Movable {
-	constructor() { super(); this. name = "Settler"; };
+	constructor() {
+    super();
+    this.name = "Settler";
+	}
 }
 

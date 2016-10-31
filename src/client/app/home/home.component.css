@@ -15,7 +15,7 @@ ul {
 .tiles .tile {
 
 }
-.tile {
+.tile, .tile-selected {
   display: inline-block;
   border: 1px solid silver;
   height: 5em;
@@ -23,6 +23,10 @@ ul {
   padding: 0.1em;
   text-align: center;
   vertical-align: middle;
+}
+
+.tile-selected {
+  border: 2px solid silver;
 }
 
 .land {
