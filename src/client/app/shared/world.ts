@@ -53,23 +53,27 @@ export class Board {
    * @throws {Error} error when no tile
    */
   public moveUnit(tile: Tile, direction: Direction): Tile {
+    const _tile: Tile = Tile.clone(tile);
+    console.log(`moveUnit cloned a tile as: ${_tile}`);
     // TODO pluggable rules, some design pattern? Strategy/Visitor?
     // guard clause for 'no unit on tile'
-    if (tile === undefined || tile === null) {
+    if (_tile === undefined || _tile === null) {
       console.log("moveUnit says you need to select a unit");
       throw new Error("moveUnit says you need to select a unit");
     }
-    const newCoord: Coord = Coord.createInDirection(tile.coord, direction);
-    const toTile: Tile = this._tiles.get(newCoord.valueOf());
-    if (toTile !== undefined && toTile.surface.isNavigateableWith(tile.unit)) {
-      toTile.unit = tile.unit;
-      tile.unit = null;
-      this._tiles.set(tile.coord.valueOf(), tile);
+    const newCoord: Coord = Coord.createInDirection(_tile.coord, direction);
+    const toTile: Tile = this.findTile(newCoord);
+    console.log(`moveUnit trying to move a unit to Tile: [${JSON.stringify(toTile)}]`);
+    if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit)) {
+      toTile.unit = _tile.unit;
+      _tile.unit = null;
+      this._tiles.set(_tile.coord.valueOf(), _tile);
       this._tiles.set(newCoord.valueOf(), toTile);
       //console.dir(this._tiles);
+      console.log(`moveUnit moved a unit to Tile: [${JSON.stringify(toTile)}]`);
       return toTile;
     }
-    console.log(`moveUnit cannot move to Tile @ ${newCoord}`);
+    console.log(`moveUnit cannot move to Tile @ ${newCoord} returning original ${tile}`);
     return tile;
   }
 
@@ -121,19 +125,19 @@ export class Coord {
     let newY = coord.y;
     switch (direction) {
       case Direction.Up:
-        newY = coord.x - 1;
+        newY = coord.y - 1;
       break;
       case Direction.Right:
         newX = coord.x + 1;
       break;
       case Direction.Down:
-        newY = coord.x + 1;
+        newY = coord.y + 1;
       break;
       case Direction.Left:
         newX = coord.x - 1;
       break;
     }
-    console.log(`new coords for move ${direction} are [${newX}][${newY}]`);
+    console.log(`old [${coord.x}][${coord.y}] and new coords for move ${direction} are [${newX}][${newY}]`);
     return Coord.create(newX, newY);
   }
 
@@ -169,6 +173,9 @@ export class Tile {
   static create(coord: Coord, surface: Surface, unit?: Unit): Tile {
     return new Tile(coord, surface, unit);
   }
+  static clone(tile: Tile): Tile {
+    return Tile.create(tile.coord, tile.surface, tile.unit);
+  }
   public equals(anotherTile: Tile): boolean {
     return this.coord.equals(anotherTile.coord);
   }
@@ -192,7 +199,7 @@ export class Land implements Surface {
     this.name = "Land";
   };
   isNavigateableWith(unit: Unit): Boolean {
-    return (unit.canMove && !unit.isAquatic);
+    return (unit && unit.canMove && !unit.isAquatic);
   }
 }
 
@@ -203,15 +210,15 @@ export class Sea implements Surface {
     this.name = "Sea";
   };
   isNavigateableWith(unit: Unit): Boolean {
-    return unit.canMove && unit.isAquatic;
+    return (unit && unit.canMove && unit.isAquatic);
   }
 }
 
 export enum Direction {
   Up,
+  Right,
   Down,
-  Left,
-  Right
+  Left
 }
 
 // getKeyByValue(map: Map<String, Object>, value: string) {

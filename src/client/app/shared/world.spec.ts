@@ -24,18 +24,25 @@ export function main() {
     });
 
     it("should NOT move a Settler from one Land Tile to a Sea Tile", () => {
-      const board: Board = new Board(10);
+      const board: Board = new Board(5);
+      console.log("ORIGINAL BOARD: " + JSON.stringify(board.tiles));
       const coord: Coord = Coord.create(4, 0); // Land
       board.placeUnit(coord, new Settler());
       const oldTile: Tile = board.findTile(coord);
+      console.log("1: " + JSON.stringify(oldTile));
       expect(oldTile.unit instanceof Settler).toBe(true);
-      expect(oldTile.coord).toEqual(coord);
-      const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
+      expect(oldTile.coord.valueOf()).toEqual("4,0");
+      console.log("1.5: " + JSON.stringify(oldTile));
+      const newTile: Tile = board.moveUnit(oldTile, Direction.Right);
+      console.log("2: " + JSON.stringify(oldTile));
+      console.log("3: " + JSON.stringify(newTile));
       expect(newTile.unit instanceof Settler).toBe(true);
-      expect(newTile.coord).toEqual(coord);
+      expect(newTile.coord.valueOf()).toEqual("4,0");
+      console.log(JSON.stringify(board.tiles));
     });
+
     it("should NOT move a SailBoat from one Sea Tile to a Land Tile", () => {
-      const board: Board = new Board(10);
+      const board: Board = new Board(5);
       const coord: Coord = Coord.create(5, 0); // Seas
       board.placeUnit(coord, new SailBoat());
       const oldTile: Tile = board.findTile(coord);

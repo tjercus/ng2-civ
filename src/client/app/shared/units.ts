@@ -23,6 +23,7 @@ export class City extends Unit {
   constructor() {
     super();
     this.name = "City";
+    this.canMove = false;
   }
 }
 
