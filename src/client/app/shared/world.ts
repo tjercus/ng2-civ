@@ -1,5 +1,4 @@
 import {Unit} from "./units";
-import {Direct} from "protractor/built/driverProviders";
 
 // function clone(obj:any) {
 //   return JSON.parse(JSON.stringify(obj));
@@ -20,11 +19,18 @@ export class Board {
   constructor(boardSize: number) {
     let i = 0;
     for (;i < boardSize; i++) {
-      this._tiles.set(Coord.create(i, 0).valueOf(), this.createLandTile(i, 0));
+      this._tiles.set(Coord.create(i, 0).valueOf(), Board.createLandTile(i, 0));
     }
     for (;i < boardSize + 5; i++) {
-      this._tiles.set(Coord.create(i, 0).valueOf(), this.createSeaTile(i, 0));
+      this._tiles.set(Coord.create(i, 0).valueOf(), Board.createSeaTile(i, 0));
     }
+  }
+
+  static createLandTile(x: number, y: number): Tile {
+    return Tile.create(Coord.create(x, y), new Land());
+  }
+  static createSeaTile(x: number, y: number): Tile {
+    return Tile.create(Coord.create(x, y), new Sea());
   }
 
   /**
@@ -43,24 +49,28 @@ export class Board {
    * Assuming a Tile has one Unit, move it in the Direction asked
    * @param {Tile} tile
    * @param {Direction} direction
-   * @returns {Tile} tile to move to
-   * @throws {MoveException} ex
+   * @returns {Tile} tile to move to or original tile if toTile does not exist
+   * @throws {Error} error when no tile
    */
   public moveUnit(tile: Tile, direction: Direction): Tile {
+    // TODO pluggable rules, some design pattern? Strategy/Visitor?
     // guard clause for 'no unit on tile'
     if (tile === undefined || tile === null) {
       console.log("moveUnit says you need to select a unit");
       throw new Error("moveUnit says you need to select a unit");
     }
-    // TODO guard clause for bordercontrol
     const newCoord: Coord = Coord.createInDirection(tile.coord, direction);
     const toTile: Tile = this._tiles.get(newCoord.valueOf());
-    toTile.unit = tile.unit;
-    tile.unit = null;
-    this._tiles.set(tile.coord.valueOf(), tile);
-    this._tiles.set(newCoord.valueOf(), toTile);
-    //console.dir(this._tiles);
-    return toTile;
+    if (toTile !== undefined && toTile.surface.isNavigateableWith(tile.unit)) {
+      toTile.unit = tile.unit;
+      tile.unit = null;
+      this._tiles.set(tile.coord.valueOf(), tile);
+      this._tiles.set(newCoord.valueOf(), toTile);
+      //console.dir(this._tiles);
+      return toTile;
+    }
+    console.log(`moveUnit cannot move to Tile @ ${newCoord}`);
+    return tile;
   }
 
   public get tiles(): Array<Tile> {
@@ -69,13 +79,6 @@ export class Board {
 
   public findTile(coord: Coord): Tile {
     return this._tiles.get(coord.valueOf());
-  }
-
-  private createLandTile(x: number, y: number): Tile {
-    return Tile.create(Coord.create(x, y), new Land());
-  }
-  private createSeaTile(x: number, y: number): Tile {
-    return Tile.create(Coord.create(x, y), new Sea());
   }
 }
 
@@ -169,30 +172,39 @@ export class Tile {
   public equals(anotherTile: Tile): boolean {
     return this.coord.equals(anotherTile.coord);
   }
-  public toString() : string {
-    return `[${this.coord}] has ${this.unit || "no unit"}`;
+  public toString(): string {
+    return `[${this.coord}] has ${this.unit || ""}`;
   }
 }
 
 /**
- * Type of material as lowest level of a Tile
+ * Type of material as lowest level on a Tile
  */
 export interface Surface {
   name: string;
+  isNavigateableWith(unit: Unit): Boolean;
 }
 
 export class Land implements Surface {
   public name: string;
+
   constructor() {
     this.name = "Land";
   };
+  isNavigateableWith(unit: Unit): Boolean {
+    return (unit.canMove && !unit.isAquatic);
+  }
 }
 
 export class Sea implements Surface {
   public name: string;
+
   constructor() {
     this.name = "Sea";
   };
+  isNavigateableWith(unit: Unit): Boolean {
+    return unit.canMove && unit.isAquatic;
+  }
 }
 
 export enum Direction {

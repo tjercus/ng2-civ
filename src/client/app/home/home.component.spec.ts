@@ -44,10 +44,10 @@ export function main() {
             //let homeInstance = fixture.debugElement.children[0].componentInstance;
             let homeDOMEl = fixture.debugElement.children[0].nativeElement;
 
-            expect(homeDOMEl.querySelectorAll('li').length).toEqual(5);
+            expect(homeDOMEl.querySelectorAll('li').length).toEqual(10);
             fixture.detectChanges();
-            expect(homeDOMEl.querySelectorAll('li')[0].textContent).toContain('[0,0] has no unit');
-            expect(homeDOMEl.querySelectorAll('li')[1].textContent).toContain('[1,0] has no unit');
+            expect(homeDOMEl.querySelectorAll('li')[0].textContent).toContain('[0,0] has');
+            expect(homeDOMEl.querySelectorAll('li')[1].textContent).toContain('[1,0] has');
           });
 
       }));

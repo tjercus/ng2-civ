@@ -1,5 +1,5 @@
 import {Board, Coord, Direction, Tile} from "./world";
-import {Settler, Unit} from "./units";
+import {Settler, Unit, SailBoat} from "./units";
 
 export function main() {
   describe("Board.placeUnit", () => {
@@ -18,10 +18,32 @@ export function main() {
       const coord: Coord = Coord.create(1, 0);
       board.placeUnit(coord, new Settler());
       const newCoord: Coord = Coord.create(2, 0);
-      board.moveUnit(board.findTile(coord), Direction.Right);
-      const newTile: Tile = board.findTile(newCoord);
-      expect(newTile.unit.name).toEqual("Settler");
+      const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
+      expect(newTile.unit instanceof Settler).toBe(true);
       expect(newTile.coord).toEqual(newCoord);
+    });
+
+    it("should NOT move a Settler from one Land Tile to a Sea Tile", () => {
+      const board: Board = new Board(10);
+      const coord: Coord = Coord.create(4, 0); // Land
+      board.placeUnit(coord, new Settler());
+      const oldTile: Tile = board.findTile(coord);
+      expect(oldTile.unit instanceof Settler).toBe(true);
+      expect(oldTile.coord).toEqual(coord);
+      const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
+      expect(newTile.unit instanceof Settler).toBe(true);
+      expect(newTile.coord).toEqual(coord);
+    });
+    it("should NOT move a SailBoat from one Sea Tile to a Land Tile", () => {
+      const board: Board = new Board(10);
+      const coord: Coord = Coord.create(5, 0); // Seas
+      board.placeUnit(coord, new SailBoat());
+      const oldTile: Tile = board.findTile(coord);
+      expect(oldTile.unit instanceof SailBoat).toBe(true);
+      expect(oldTile.coord).toEqual(coord);
+      const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Left);
+      expect(newTile.unit instanceof SailBoat).toBe(true);
+      expect(newTile.coord).toEqual(coord);
     });
   });
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import {Settler} from "../shared/units";
+import {Settler, SailBoat} from "../shared/units";
 import {Coord, Tile, Board, Direction} from "../shared/world";
 //import {Map} from "immutable";
 
@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
     this.tiles = this.board.tiles;
 
     this.board.placeUnit(Coord.create(2,0), new Settler());
+    this.board.placeUnit(Coord.create(6,0), new SailBoat());
   }
 
   setCssClasses(tile: Tile) {

@@ -12,8 +12,6 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
- - Land units should not move on Sea
- - Sea units should not move on Land
  - Introduce Road
  - Introduce Railroad
  - Introduce a dashboard with context actions for a Settler
