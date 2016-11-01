@@ -12,6 +12,7 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
+ - Upgrade home.component to render the board in 2 dimensions *
  - Introduce Road
  - Introduce Railroad
  - Introduce a dashboard with context actions for a Settler
@@ -24,3 +25,8 @@ npm run start.deving
  - Introduce Hitpoints
  - Introduce Health
  - Introduce Attack
+
+
+## Research
+ - http://stackoverflow.com/questions/34556277/angular2-table-rows-as-component#34556489
+ - https://github.com/compute-io/chunkify
