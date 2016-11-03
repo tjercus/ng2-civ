@@ -44,10 +44,11 @@ export function main() {
             //let homeInstance = fixture.debugElement.children[0].componentInstance;
             let homeDOMEl = fixture.debugElement.children[0].nativeElement;
 
-            expect(homeDOMEl.querySelectorAll('li').length).toEqual(10);
+            expect(homeDOMEl.querySelectorAll('tr').length).toEqual(5);
+            expect(homeDOMEl.querySelectorAll('td').length).toEqual(20);
             fixture.detectChanges();
-            expect(homeDOMEl.querySelectorAll('li')[0].textContent).toContain('[0,0] has');
-            expect(homeDOMEl.querySelectorAll('li')[1].textContent).toContain('[1,0] has');
+            expect(homeDOMEl.querySelectorAll('td')[0].textContent).toContain('[0,0] has');
+            expect(homeDOMEl.querySelectorAll('td')[1].textContent).toContain('[1,0] has');
           });
 
       }));

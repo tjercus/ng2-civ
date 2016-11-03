@@ -1,12 +1,16 @@
 <h2>World</h2>
 
-<ul class="board">
-	<li *ngFor="let tile of tiles"
-      [ngClass]="setCssClasses(tile)"
-      (click)="onSelectTileClick(tile)">
-    {{tile.toString()}}
-  </li>
-</ul>
+<table>
+  <tbody>
+    <tr *ngFor="let row of grid">
+      <td *ngFor="let tile of row"
+          [ngClass]="setCssClasses(tile)"
+          (click)="onSelectTileClick(tile)">
+        {{tile.toString()}}
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 <nav class="buttonbar">
   <button (click)="onUpClick()">move up</button>

@@ -1,7 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {Settler, SailBoat} from "../shared/units";
 import {Coord, Tile, Board, Direction} from "../shared/world";
-//import {Map} from "immutable";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -16,6 +15,7 @@ import {Coord, Tile, Board, Direction} from "../shared/world";
 export class HomeComponent implements OnInit {
 
   public tiles: Array<Tile> = [];
+  public grid: Array<Array<Tile>> = [[]];
 
   private selectedTile: Tile = null;
   private board: Board; // TODO use as a properly observed angular service?
@@ -29,8 +29,24 @@ export class HomeComponent implements OnInit {
     this.board = new Board(5);
     this.tiles = this.board.tiles;
 
-    this.board.placeUnit(Coord.create(2,0), new Settler());
-    this.board.placeUnit(Coord.create(6,0), new SailBoat());
+    this.board.placeUnit(Coord.create(2,3), new Settler());
+    this.board.placeUnit(Coord.create(2,0), new SailBoat());
+
+    this.grid = this.partition(5, this.tiles);
+  }
+
+  /**
+   * Move to World or Util
+   * @param {number} size of a row if tiles on grid
+   * @param {Array<Tile>} coll
+   * @returns {Array<Array<Tile>>}
+   */
+  partition(size: number, coll: Array<Tile>): Array<Array<Tile>> {
+    var res: Array<Array<Tile>> = [[]];
+    for (var i = 0, l = coll.length; i < l; i += size) {
+      res.push(coll.slice(i, i + size));
+    }
+    return res;
   }
 
   setCssClasses(tile: Tile) {

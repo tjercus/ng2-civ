@@ -16,14 +16,27 @@ export class Board {
    * Create a board that is boardSize wide, for now only 1 row is supported
    * @param {number} boardSize
    */
-  constructor(boardSize: number) {
-    let i = 0;
-    for (;i < boardSize; i++) {
-      this._tiles.set(Coord.create(i, 0).valueOf(), Board.createLandTile(i, 0));
+  constructor(boardSize: number = 5) {
+    // init with Default board
+    for (let i = 0; i < boardSize; i++) {
+      this.setSeaTileAt(i, 0);
     }
-    for (;i < boardSize + 5; i++) {
-      this._tiles.set(Coord.create(i, 0).valueOf(), Board.createSeaTile(i, 0));
+    for (let j = 0; j < boardSize; j++) {
+      this.setSeaTileAt(j, 1);
     }
+    for (let k = 0; k < boardSize; k++) {
+      this.setLandTileAt(k, 2);
+    }
+    for (let l = 0; l < boardSize; l++) {
+      this.setLandTileAt(l, 3);
+    }
+  }
+
+  setSeaTileAt(x: number, y: number): void {
+    this._tiles.set(Coord.create(x, y).valueOf(), Board.createSeaTile(x, y));
+  }
+  setLandTileAt(x: number, y: number): void {
+    this._tiles.set(Coord.create(x, y).valueOf(), Board.createLandTile(x, y));
   }
 
   static createLandTile(x: number, y: number): Tile {

@@ -13,6 +13,7 @@ npm run start.deving
 
 ## TODO
  - Upgrade home.component to render the board in 2 dimensions *
+ - Allow boardConfig options so a map can be passed from JSON or yaml or whatever
  - Introduce Road
  - Introduce Railroad
  - Introduce a dashboard with context actions for a Settler
