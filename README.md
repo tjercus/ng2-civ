@@ -12,7 +12,7 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
-  - Introduce Road
+ - Introduce Road
  - Introduce Railroad
  - Introduce a dashboard with context actions for a Settler
  - Introduce Turns

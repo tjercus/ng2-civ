@@ -218,7 +218,8 @@ export class Tile {
     return this.coord.equals(anotherTile.coord);
   }
   public toString(): string {
-    return `[${this.coord}] has ${this.unit || ""}`;
+    // TODO use StringBuilder
+    return `[${this.coord}] has ${this.unit || ""} and ${this.surface.hasRoad || ""}`;
   }
 }
 
@@ -227,15 +228,23 @@ export class Tile {
  */
 export interface Surface {
   name: string;
+  hasRoad: boolean;
   isNavigateableWith(unit: Unit): Boolean;
 }
 
 export class Land implements Surface {
   public name: string;
+  public hasRoad: boolean = false;
 
   constructor() {
     this.name = "Land";
   };
+  // public get hasRoad(): boolean {
+  //   return this.hasRoad;
+  // }
+  // public set hasRoad(has: boolean) {
+  //   this.hasRoad = has;
+  // }
   isNavigateableWith(unit: Unit): Boolean {
     return (unit && unit.canMove && !unit.isAquatic);
   }
@@ -243,6 +252,7 @@ export class Land implements Surface {
 
 export class Sea implements Surface {
   public name: string;
+  public hasRoad: boolean = false;
 
   constructor() {
     this.name = "Sea";

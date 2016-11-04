@@ -1,6 +1,6 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import {Settler, SailBoat} from "../shared/units";
-import {Coord, Tile, Board, Direction} from "../shared/world";
+import {Coord, Tile, Board, Direction, Land} from "../shared/world";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -70,5 +70,10 @@ export class HomeComponent implements OnInit {
   }
   onLeftClick() {
     this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Left);
+  }
+
+  onBuildRoadClick() {
+    // TODO check if there is a settler on the Tile
+    if (this.selectedTile.surface.name === "Land") this.selectedTile.surface.hasRoad = true;
   }
 }
