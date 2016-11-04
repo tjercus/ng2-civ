@@ -19,7 +19,9 @@ export function main() {
       board.placeUnit(coord, new Settler());
       const newCoord: Coord = Coord.create(1, 3);
       const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
+      const oldTile: Tile = board.findTile(coord);
       expect(newTile.unit instanceof Settler).toBe(true);
+      expect(oldTile.unit instanceof Settler).toBe(false);
       expect(newTile.coord).toEqual(newCoord);
     });
 
@@ -80,4 +82,27 @@ export function main() {
       expect(newCoord.y).toEqual(0);
     });
   });
+
+  describe("Coord.createFromSpec", () => {
+    it("should create a Coord from a csv separated string", () => {
+      const newCoord: Coord = Coord.createFromString("4,3");
+      expect(newCoord.x).toEqual(4);
+      expect(newCoord.y).toEqual(3);
+    });
+  });
+  describe("Coord.equals", () => {
+    it("should say true when x and y are same for another object", () => {
+      const newCoord: Coord = Coord.create(4, 3);
+      const anotherCoord: Coord = Coord.create(4, 3);
+      expect(newCoord).toEqual(anotherCoord);
+      expect(newCoord.equals(anotherCoord)).toBe(true);
+    });
+    it("should say false when x and y are NOT the same for another object", () => {
+      const newCoord: Coord = Coord.create(4, 3);
+      const anotherCoord: Coord = Coord.create(3, 4);
+      expect(newCoord).not.toEqual(anotherCoord);
+      expect(newCoord.equals(anotherCoord)).toBe(false);
+    });
+  });
+
 };

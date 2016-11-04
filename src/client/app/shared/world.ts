@@ -11,12 +11,14 @@ import {Unit} from "./units";
  */
 export class Board {
   private _tiles: Map<String, Tile> = new Map<String, Tile>();
+  private boardSize: number;
 
   /**
    * Create a board that is boardSize wide, for now only 1 row is supported
    * @param {number} boardSize
    */
   constructor(boardSize: number = 5) {
+    this.boardSize = boardSize;
     // init with Default board
     for (let i = 0; i < boardSize; i++) {
       this.setSeaTileAt(i, 0);
@@ -90,12 +92,26 @@ export class Board {
     return tile;
   }
 
-  public get tiles(): Array<Tile> {
-    return Array.from(this._tiles.values());
+  public get grid(): Array<Array<Tile>> {
+    return this.partition(5, Array.from(this._tiles.values()));
   }
 
   public findTile(coord: Coord): Tile {
     return this._tiles.get(coord.valueOf());
+  }
+
+  /**
+   * Translate a Map of Tile to a 2d grid of Tile
+   * @param {number} size of a row if tiles on grid
+   * @param {Array<Tile>} coll
+   * @returns {Array<Array<Tile>>}
+   */
+  private partition(size: number, coll: Array<Tile>): Array<Array<Tile>> {
+    var res: Array<Array<Tile>> = [[]];
+    for (var i = 0, l = coll.length; i < l; i += size) {
+      res.push(coll.slice(i, i + size));
+    }
+    return res;
   }
 }
 
@@ -122,7 +138,12 @@ export class Coord {
     return new Coord(x, y);
   }
 
-  public static createFromString(csv: string) {
+  /**
+   * Create a Coord from a csv string desc.
+   * @param {string} csv
+   * @returns {Coord} created obj
+   */
+  public static createFromString(csv: string): Coord {
     const arr: Array<string> = csv.split(",");
     return Coord.create(parseInt(arr[0]), parseInt(arr[1]));
   }
