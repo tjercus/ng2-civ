@@ -86,6 +86,8 @@ export class Board {
       this._tiles.set(newCoord.valueOf(), toTile);
       //console.dir(this._tiles);
       console.log(`moveUnit moved a unit to Tile: [${JSON.stringify(toTile)}]`);
+      console.log(`moveUnit left the old tile as: [${JSON.stringify(_tile)}]`);
+      //console.log(`the board: ${JSON.stringify(this._tiles)}`);
       return toTile;
     }
     console.log(`moveUnit cannot move to Tile @ ${newCoord} returning original ${tile}`);
@@ -93,7 +95,9 @@ export class Board {
   }
 
   public get grid(): Array<Array<Tile>> {
-    return this.partition(5, Array.from(this._tiles.values()));
+    const out: Array<Array<Tile>> = this.partition(5, Array.from(this._tiles.values()));
+    //console.log(`getGrid was called for ${JSON.stringify(out)}`);
+    return out;
   }
 
   public findTile(coord: Coord): Tile {

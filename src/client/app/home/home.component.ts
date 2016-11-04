@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import {Settler, SailBoat} from "../shared/units";
 import {Coord, Tile, Board, Direction} from "../shared/world";
 
@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   private selectedTile: Tile = null;
   private board: Board; // TODO use as a properly observed angular service?
 
-  constructor(private cdr:ChangeDetectorRef) {}
+  constructor() {}
 
   /**
    * Get the board OnInit
@@ -32,6 +32,14 @@ export class HomeComponent implements OnInit {
     this.board.placeUnit(Coord.create(2,0), new SailBoat());
 
     this.grid = this.board.grid; //
+  }
+
+  /**
+   * Angular2 does not completely understand when the grid needs reloading,
+   *  so this method forces a reload of the grid
+   */
+  ngDoCheck() {
+    this.grid = this.board.grid;
   }
 
   setCssClasses(tile: Tile) {
