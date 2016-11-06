@@ -12,11 +12,12 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
+ # EPIC 2
  - Introduce Road
- - Introduce Railroad
- - Introduce a dashboard with context actions for a Settler
  - Introduce Turns
+ - Introduce a dashboard with context actions for a Settler
  - Land units should be able to move more than one square per turn
+ 
  - Support Mountains
  - Use Icons for Surfaces and Units
  - Introduce City Unit
@@ -24,6 +25,8 @@ npm run start.deving
  - Introduce Hitpoints
  - Introduce Health
  - Introduce Attack
+ - Introduce Railroad
+ - Introduce Research, Tech Tree
  - Allow boardConfig options so a map can be passed from JSON or yaml or whatever
 
 ## Research

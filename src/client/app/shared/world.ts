@@ -4,6 +4,12 @@ import {Unit} from "./units";
 //   return JSON.parse(JSON.stringify(obj));
 // }
 
+export class Game() {
+  //public players: Array<Player> = [];
+  public year: number = 1;
+  constructor() {}
+}
+
 /**
  * Holds and exposes the game board, only this class can work on the Tiles
  *  x = horizontal
@@ -92,6 +98,28 @@ export class Board {
     }
     console.log(`moveUnit cannot move to Tile @ ${newCoord} returning original ${tile}`);
     return tile;
+  }
+
+  public placeRoad(coord: Coord): void {
+    // TODO check if there is a settler on the Tile
+    const tile: Tile = this._tiles.get(coord.valueOf());
+    if (tile && tile.surface.name === "Land") {
+      tile.surface.hasRoad = true;
+      this._tiles.set(coord.valueOf(), tile);
+    } else {
+      console.log(`no tile found at ${coord}`);
+    }
+  }
+
+  public placeCity(coord: Coord, city: City): void {
+    // TODO check if there is a settler on the Tile
+    const tile: Tile = this._tiles.get(coord.valueOf());
+    if (tile && tile.surface.name === "Land") {
+      tile.city = city;
+      this._tiles.set(coord.valueOf(), tile);
+    } else {
+      console.log(`no tile found at ${coord}`);
+    }
   }
 
   public get grid(): Array<Array<Tile>> {
@@ -202,6 +230,7 @@ export class Tile {
   public coord: Coord;
   public surface: Surface;
   public unit: Unit;
+  public city: City;
 
   constructor(coord: Coord, surface: Surface, unit?: Unit) {
     this.coord = coord;
@@ -219,7 +248,7 @@ export class Tile {
   }
   public toString(): string {
     // TODO use StringBuilder
-    return `[${this.coord}] has ${this.unit || ""} and ${this.surface.hasRoad || ""}`;
+    return `[${this.coord}] U: ${this.unit || "f"}, R: ${this.surface.hasRoad}, C: ${this.city || "f"}`;
   }
 }
 

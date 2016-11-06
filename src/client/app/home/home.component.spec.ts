@@ -47,8 +47,8 @@ export function main() {
             expect(homeDOMEl.querySelectorAll('tr').length).toEqual(5);
             expect(homeDOMEl.querySelectorAll('td').length).toEqual(20);
             fixture.detectChanges();
-            expect(homeDOMEl.querySelectorAll('td')[0].textContent).toContain('[0,0] has');
-            expect(homeDOMEl.querySelectorAll('td')[1].textContent).toContain('[1,0] has');
+            expect(homeDOMEl.querySelectorAll('td')[0].textContent).toContain('[0,0] U: f, R: false, C: f');
+            //expect(homeDOMEl.querySelectorAll('td')[1].textContent).toContain('[1,0] has');
           });
 
       }));

@@ -1,4 +1,4 @@
-<h2>World</h2>
+<h2>World {{this.year}}</h2>
 
 <table>
   <tbody>
@@ -19,6 +19,7 @@
   <button (click)="onLeftClick()">move left</button>
 </nav>
 
-<nav class="buttonbar">
+<nav class="buttonbar" *ngIf="toggleContextMenu">
   <button (click)="onBuildRoadClick()">build road</button>
+  <button (click)="onBuildCityClick()">build city</button>
 </nav>

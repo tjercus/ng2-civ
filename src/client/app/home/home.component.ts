@@ -1,6 +1,6 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-import {Settler, SailBoat} from "../shared/units";
-import {Coord, Tile, Board, Direction, Land} from "../shared/world";
+import {Settler, SailBoat, City} from "../shared/units";
+import {Game, Coord, Tile, Board, Direction, Land} from "../shared/world";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -16,9 +16,12 @@ export class HomeComponent implements OnInit {
 
   public tiles: Array<Tile> = [];
   public grid: Array<Array<Tile>> = [[]];
+  public year: number = 1;
 
   private selectedTile: Tile = null;
-  private board: Board; // TODO use as a properly observed angular service?
+  private board: Board = new Board(5); // TODO use as a properly observed angular service?
+  private game: Game = new Game();
+
 
   constructor() {}
 
@@ -26,12 +29,10 @@ export class HomeComponent implements OnInit {
    * Get the board OnInit
    */
   ngOnInit() {
-    this.board = new Board(5);
-
     this.board.placeUnit(Coord.create(2,3), new Settler());
     this.board.placeUnit(Coord.create(2,0), new SailBoat());
-
-    this.grid = this.board.grid; //
+    this.grid = this.board.grid;
+    this.year = this.game.year;
   }
 
   /**
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit {
    */
   ngDoCheck() {
     this.grid = this.board.grid;
+    this.year = this.game.year;
   }
 
   setCssClasses(tile: Tile) {
@@ -59,6 +61,10 @@ export class HomeComponent implements OnInit {
     console.log(`HomeComponent onSelectTileClick ${tile.toString()}`);
   }
 
+  toggleContextMenu() {
+    return this.selectedTile && this.selectedTile.unit &&this.selectedTile.unit.constructor.name === 'Settler';
+  }
+
   onUpClick() {
     this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Up);
   }
@@ -73,7 +79,9 @@ export class HomeComponent implements OnInit {
   }
 
   onBuildRoadClick() {
-    // TODO check if there is a settler on the Tile
-    if (this.selectedTile.surface.name === "Land") this.selectedTile.surface.hasRoad = true;
+    this.board.placeRoad(this.selectedTile.coord);
+  }
+  onBuildCityClick() {
+    this.board.placeCity(this.selectedTile.coord, new City());
   }
 }
