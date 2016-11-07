@@ -1,7 +1,15 @@
-import {Board, Coord, Direction, Tile} from "./world";
-import {Settler, Unit, SailBoat} from "./units";
+import {Board, Coord, Direction, Tile, Game, Land} from "./world";
+import {Settler, Unit, SailBoat, Militia} from "./units";
 
 export function main() {
+
+  describe("Game.constructor", () => {
+    it("should construct with year 1", () => {
+      const game: Game = new Game();
+      expect(game.year).toEqual(1);
+    });
+  });
+
   describe("Board.placeUnit", () => {
     it("should place a Unit on a Coord", () => {
       const board: Board = new Board(5);
@@ -9,6 +17,36 @@ export function main() {
       board.placeUnit(coord, new Settler());
       const unit: Unit = board.findTile(coord).unit;
       expect(unit.name).toEqual("Settler");
+    });
+  });
+
+  describe("Board.placeRoad", () => {
+    it("should place a road on a Land Surface if there is a Settler on it", () => {
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3);
+      board.placeUnit(coord, new Settler());
+      board.placeRoad(coord);
+      const tile: Tile = board.findTile(coord);
+      expect(tile.surface.hasRoad).toEqual(true);
+    });
+    it("should NOT place a road on a Land Surface if there is no Settler on it", () => {
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3);
+      board.placeUnit(coord, new Militia());
+      board.placeRoad(coord);
+      const tile: Tile = board.findTile(coord);
+      expect(tile.surface.hasRoad).toEqual(false);
+    });
+    it("should NOT place a road on a Land Surface if it has a Road", () => {
+      // TODO implement test when turns with movepoints are in place
+    });
+    it("should NOT place a road on a Sea Surface", () => {
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 0); // Sea
+      board.placeUnit(coord, new Settler());
+      board.placeRoad(coord);
+      const tile: Tile = board.findTile(coord);
+      expect(tile.surface.hasRoad).toEqual(false);
     });
   });
 
@@ -25,9 +63,20 @@ export function main() {
       expect(newTile.coord).toEqual(newCoord);
     });
 
+    it("should keep the road after a move", () => {
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3);
+      board.placeUnit(coord, new Settler());
+      board.placeRoad(coord);
+      const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
+      const oldTile: Tile = board.findTile(coord);
+      expect(oldTile.surface.hasRoad).toBe(true);
+      expect(newTile.surface.hasRoad).toBe(false);
+    });
+
     it("should NOT move a Settler from one Land Tile to a Sea Tile", () => {
       const board: Board = new Board(5);
-      console.log("ORIGINAL BOARD: " + JSON.stringify(board.tiles));
+      console.log("ORIGINAL BOARD: " + JSON.stringify(board.grid));
       const coord: Coord = Coord.create(0, 2); // Land
       board.placeUnit(coord, new Settler());
       const oldTile: Tile = board.findTile(coord);
@@ -40,7 +89,7 @@ export function main() {
       console.log("3: " + JSON.stringify(newTile));
       expect(newTile.unit instanceof Settler).toBe(true);
       expect(newTile.coord.valueOf()).toEqual("0,2");
-      console.log(JSON.stringify(board.tiles));
+      console.log(JSON.stringify(board.grid));
     });
 
     it("should NOT move a SailBoat from one Sea Tile to a Land Tile", () => {
@@ -102,6 +151,22 @@ export function main() {
       const anotherCoord: Coord = Coord.create(3, 4);
       expect(newCoord).not.toEqual(anotherCoord);
       expect(newCoord.equals(anotherCoord)).toBe(false);
+    });
+  });
+
+  describe("Tile.equals", () => {
+    it("should say true when x and y are same for another object", () => {
+      const newCoord: Coord = Coord.create(4, 3);
+      const tileOne: Tile = Tile.create(newCoord, new Land());
+      const tileTwo: Tile = Tile.create(newCoord, new Land());
+      expect(tileOne).toEqual(tileTwo);
+    });
+    it("should say false when x and y are NOT the same for another object", () => {
+      const newCoord: Coord = Coord.create(4, 3);
+      const anotherCoord: Coord = Coord.create(3, 4);
+      const tileOne: Tile = Tile.create(newCoord, new Land());
+      const tileTwo: Tile = Tile.create(anotherCoord, new Land());
+      expect(tileOne).not.toEqual(tileTwo);
     });
   });
 

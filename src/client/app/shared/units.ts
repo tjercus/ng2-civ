@@ -19,13 +19,13 @@ export class Unit {
     return this.name;
   }
   public hasActionLeftInTurn(currentYear: number): boolean {
-
+    return true; // TODO implement
   }
 }
 
 export class City extends Unit {
   public size: number = 1;
-  constructor(name: string = `City${Math.floor(Math.random() * (9999 - 0)) + 0}`) {
+  constructor(name: string = `City${Math.floor(Math.random() * (9999 - 0))}`) {
     super();
     this.name = name;
     this.canMove = false;
@@ -47,3 +47,9 @@ export class SailBoat extends Unit {
   }
 }
 
+export class Militia extends Unit {
+  constructor() {
+    super();
+    this.name = "Militia";
+  }
+}

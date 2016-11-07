@@ -1,6 +1,6 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import {Settler, SailBoat, City} from "../shared/units";
-import {Game, Coord, Tile, Board, Direction, Land} from "../shared/world";
+import {Game, Coord, Tile, Board, Direction, Land, Sea} from "../shared/world";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -47,8 +47,8 @@ export class HomeComponent implements OnInit {
   setCssClasses(tile: Tile) {
     return {
       "tile-selected": this.isSelected(tile),
-      "surface-sea": tile.surface.name === "Sea",
-      "surface-land": tile.surface.name === "Land",
+      "surface-sea": tile.surface instanceof Sea,
+      "surface-land": tile.surface instanceof Land,
     }
   }
 

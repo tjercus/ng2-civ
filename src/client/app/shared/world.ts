@@ -1,10 +1,10 @@
-import {Unit} from "./units";
+import {Unit, City, Settler} from "./units";
 
 // function clone(obj:any) {
 //   return JSON.parse(JSON.stringify(obj));
 // }
 
-export class Game() {
+export class Game {
   //public players: Array<Player> = [];
   public year: number = 1;
   constructor() {}
@@ -103,7 +103,7 @@ export class Board {
   public placeRoad(coord: Coord): void {
     // TODO check if there is a settler on the Tile
     const tile: Tile = this._tiles.get(coord.valueOf());
-    if (tile && tile.surface.name === "Land") {
+    if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
       tile.surface.hasRoad = true;
       this._tiles.set(coord.valueOf(), tile);
     } else {
@@ -114,7 +114,7 @@ export class Board {
   public placeCity(coord: Coord, city: City): void {
     // TODO check if there is a settler on the Tile
     const tile: Tile = this._tiles.get(coord.valueOf());
-    if (tile && tile.surface.name === "Land") {
+    if (tile && tile.surface instanceof Land) {
       tile.city = city;
       this._tiles.set(coord.valueOf(), tile);
     } else {

@@ -32,3 +32,5 @@ npm run start.deving
 ## Research
  - http://stackoverflow.com/questions/34556277/angular2-table-rows-as-component#34556489
  - https://github.com/compute-io/chunkify
+ - http://civilization.wikia.com/wiki/List_of_units_in_Civ1
+ - http://freeciv.wikia.com/wiki/Units
