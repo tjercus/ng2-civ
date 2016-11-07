@@ -5,7 +5,7 @@ export function main() {
 
   describe("Game.constructor", () => {
     it("should construct with year 1", () => {
-      const game: Game = new Game();
+      const game: Game = new Game(new Board());
       expect(game.year).toEqual(1);
     });
   });
@@ -159,14 +159,14 @@ export function main() {
       const newCoord: Coord = Coord.create(4, 3);
       const tileOne: Tile = Tile.create(newCoord, new Land());
       const tileTwo: Tile = Tile.create(newCoord, new Land());
-      expect(tileOne).toEqual(tileTwo);
+      expect(tileOne.equals(tileTwo)).toBe(true);
     });
     it("should say false when x and y are NOT the same for another object", () => {
       const newCoord: Coord = Coord.create(4, 3);
       const anotherCoord: Coord = Coord.create(3, 4);
       const tileOne: Tile = Tile.create(newCoord, new Land());
       const tileTwo: Tile = Tile.create(anotherCoord, new Land());
-      expect(tileOne).not.toEqual(tileTwo);
+      expect(tileOne.equals(tileTwo)).toBe(false);
     });
   });
 

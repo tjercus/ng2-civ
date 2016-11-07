@@ -1,4 +1,4 @@
-<h2>World {{this.year}}</h2>
+<h2>World {{game.year}}</h2>
 
 <table>
   <tbody>
@@ -14,10 +14,10 @@
 </table>
 
 <nav class="buttonbar">
-  <button (click)="onUpClick()">move up</button>
-  <button (click)="onRightClick()">move right</button>
-  <button (click)="onDownClick()">move down</button>
   <button (click)="onLeftClick()">move left</button>
+  <button (click)="onUpClick()">move up</button>
+  <button (click)="onDownClick()">move down</button>
+  <button (click)="onRightClick()">move right</button>
 </nav>
 
 <nav class="buttonbar" *ngIf="toggleContextMenu">

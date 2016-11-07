@@ -1,13 +1,17 @@
-import {Unit, City, Settler} from "./units";
-
-// function clone(obj:any) {
-//   return JSON.parse(JSON.stringify(obj));
-// }
+import {Unit, City, Settler, SailBoat} from "./units";
 
 export class Game {
   //public players: Array<Player> = [];
   public year: number = 1;
-  constructor() {}
+  public board: Board;
+
+  constructor(board: Board) {
+    this.board = board;
+    const settler = new Settler();
+    this.board.activeTile = this.board.placeUnit(Coord.create(2,3), settler);
+    // TODO a player should start with only one Settler and no boat
+    this.board.placeUnit(Coord.create(2,0), new SailBoat());
+  }
 }
 
 /**
@@ -18,6 +22,7 @@ export class Game {
 export class Board {
   private _tiles: Map<String, Tile> = new Map<String, Tile>();
   private boardSize: number;
+  public activeTile: Tile;
 
   /**
    * Create a board that is boardSize wide, for now only 1 row is supported
@@ -58,12 +63,14 @@ export class Board {
    * Put a unit in a Tile on the board
    * @param coord
    * @param unit
+   * @return {Tile} tile
    */
-  public placeUnit(coord: Coord, unit: Unit): void {
+  public placeUnit(coord: Coord, unit: Unit): Tile {
     console.log(`Board.placeUnit ${unit} @ ${coord}`);
     const tile: Tile = this._tiles.get(coord.valueOf());
     tile.unit = unit;
     this._tiles.set(coord.valueOf(), tile);
+    return tile;
   }
 
   /**
@@ -76,7 +83,7 @@ export class Board {
   public moveUnit(tile: Tile, direction: Direction): Tile {
     const _tile: Tile = Tile.clone(tile);
     console.log(`moveUnit cloned a tile as: ${_tile}`);
-    // TODO pluggable rules, some design pattern? Strategy/Visitor?
+    // TODO plugable rules, some design pattern? Strategy/Visitor?
     // guard clause for 'no unit on tile'
     if (_tile === undefined || _tile === null) {
       console.log("moveUnit says you need to select a unit");

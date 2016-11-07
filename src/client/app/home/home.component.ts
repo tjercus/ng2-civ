@@ -16,12 +16,9 @@ export class HomeComponent implements OnInit {
 
   public tiles: Array<Tile> = [];
   public grid: Array<Array<Tile>> = [[]];
-  public year: number = 1;
 
-  private selectedTile: Tile = null;
   private board: Board = new Board(5); // TODO use as a properly observed angular service?
-  private game: Game = new Game();
-
+  public game: Game = new Game(this.board);
 
   constructor() {}
 
@@ -29,10 +26,7 @@ export class HomeComponent implements OnInit {
    * Get the board OnInit
    */
   ngOnInit() {
-    this.board.placeUnit(Coord.create(2,3), new Settler());
-    this.board.placeUnit(Coord.create(2,0), new SailBoat());
     this.grid = this.board.grid;
-    this.year = this.game.year;
   }
 
   /**
@@ -41,7 +35,6 @@ export class HomeComponent implements OnInit {
    */
   ngDoCheck() {
     this.grid = this.board.grid;
-    this.year = this.game.year;
   }
 
   setCssClasses(tile: Tile) {
@@ -53,35 +46,37 @@ export class HomeComponent implements OnInit {
   }
 
   isSelected(tile: Tile): boolean {
-    return this.selectedTile !== null && this.selectedTile.equals(tile);
+    return this.board.activeTile !== null && this.board.activeTile.equals(tile);
   }
 
   onSelectTileClick(tile: Tile) {
-    this.selectedTile = tile;
+    this.board.activeTile = tile;
     console.log(`HomeComponent onSelectTileClick ${tile.toString()}`);
   }
 
   toggleContextMenu() {
-    return this.selectedTile && this.selectedTile.unit &&this.selectedTile.unit.constructor.name === 'Settler';
+    return this.board.activeTile &&
+      this.board.activeTile.unit &&
+      this.board.activeTile.unit instanceof Settler;
   }
 
   onUpClick() {
-    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Up);
+    this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Up);
   }
   onRightClick() {
-    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Right);
+    this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Right);
   }
   onDownClick() {
-    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Down);
+    this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Down);
   }
   onLeftClick() {
-    this.selectedTile = this.board.moveUnit(this.selectedTile, Direction.Left);
+    this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Left);
   }
 
   onBuildRoadClick() {
-    this.board.placeRoad(this.selectedTile.coord);
+    this.board.placeRoad(this.board.activeTile.coord);
   }
   onBuildCityClick() {
-    this.board.placeCity(this.selectedTile.coord, new City());
+    this.board.placeCity(this.board.activeTile.coord, new City());
   }
 }
