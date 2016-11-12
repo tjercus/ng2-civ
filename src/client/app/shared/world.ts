@@ -239,16 +239,17 @@ export class Tile {
   public unit: Unit;
   public city: City;
 
-  constructor(coord: Coord, surface: Surface, unit?: Unit) {
+  constructor(coord: Coord, surface: Surface, unit?: Unit, city?: City) {
     this.coord = coord;
     this.surface = surface;
     this.unit = unit;
+    this.city = city;
   }
-  static create(coord: Coord, surface: Surface, unit?: Unit): Tile {
-    return new Tile(coord, surface, unit);
+  static create(coord: Coord, surface: Surface, unit?: Unit, city?: City): Tile {
+    return new Tile(coord, surface, unit, city);
   }
   static clone(tile: Tile): Tile {
-    return Tile.create(tile.coord, tile.surface, tile.unit);
+    return Tile.create(tile.coord, tile.surface, tile.unit, tile.city);
   }
   public equals(anotherTile: Tile): boolean {
     return this.coord.equals(anotherTile.coord);
