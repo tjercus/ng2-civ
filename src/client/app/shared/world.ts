@@ -12,6 +12,14 @@ export class Game {
     // TODO a player should start with only one Settler and no boat
     this.board.placeUnit(Coord.create(2,0), new SailBoat());
   }
+
+  /**
+   * TODO called by button and automatically when all units have no more actions
+   */
+  endTurn() {
+    this.year++;
+    // TODO iterate over units for the (currently one) player and update their state?
+  }
 }
 
 /**
@@ -92,7 +100,7 @@ export class Board {
     const newCoord: Coord = Coord.createInDirection(_tile.coord, direction);
     const toTile: Tile = this.findTile(newCoord);
     console.log(`moveUnit trying to move a unit to Tile: [${JSON.stringify(toTile)}]`);
-    if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit)) {
+    if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit) && _tile.unit.hasActionLeft()) {
       toTile.unit = _tile.unit;
       _tile.unit = null;
       this._tiles.set(_tile.coord.valueOf(), _tile);
@@ -276,12 +284,7 @@ export class Land implements Surface {
   constructor() {
     this.name = "Land";
   };
-  // public get hasRoad(): boolean {
-  //   return this.hasRoad;
-  // }
-  // public set hasRoad(has: boolean) {
-  //   this.hasRoad = has;
-  // }
+
   isNavigateableWith(unit: Unit): Boolean {
     return (unit && unit.canMove && !unit.isAquatic);
   }

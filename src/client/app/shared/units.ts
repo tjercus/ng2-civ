@@ -1,4 +1,4 @@
-// units.ts 
+// units.ts
 
 // export interface Moveable {
 //   // TODO
@@ -10,7 +10,8 @@ export class Unit {
   name: string;
   canMove: boolean = true;
   isAquatic: boolean = false;
-  lastActionYear: number = 1;
+  health: number = 100;
+  remainingMovePoints: number = 1;
 
   constructor() {
     console.log(`name is ${this.name}`);
@@ -18,25 +19,50 @@ export class Unit {
   public toString(): string {
     return this.name;
   }
-  public hasActionLeftInTurn(currentYear: number): boolean {
-    return true; // TODO implement
+
+  /**
+   * Note that different types of Units need to implement it differently
+   * @returns {boolean} has some action left in current turn?
+   */
+  public hasActionLeft(): boolean {
+    return (this.remainingMovePoints > 0);
   }
 }
 
 export class City extends Unit {
   public size: number = 1;
-  constructor(name: string = `City${Math.floor(Math.random() * (9999 - 0))}`) {
+  constructor(name: string = `City${Math.floor(Math.random() * (9999))}`) {
     super();
     this.name = name;
     this.canMove = false;
+    this.remainingMovePoints = 1;
   }
 }
 
 export class Settler extends Unit {
-	constructor() {
+  public workingOn: SettlerWork;
+  public workFinishedInYear: number;
+
+  constructor() {
     super();
     this.name = "Settler";
+    this.workingOn = SettlerWork.Nothing;
+    this.workFinishedInYear = null;
 	}
+
+	public hasActionLeft(): boolean {
+    return this.remainingMovePoints > 0 || this.workingOn === SettlerWork.Nothing;
+  }
+
+  /**
+   * Note that stopWork is not supported for now, workStatus will change in workFinishedYear
+   * @param {SettlerWork} work to do
+   * @param {number} currentYear as start year and finish year can be calculated based on duration of work
+   */
+  startWork(work: SettlerWork, currentYear: number) {
+    this.workingOn = work;
+    this.workFinishedInYear = currentYear + 3;
+  }
 }
 
 export class SailBoat extends Unit {
@@ -52,4 +78,14 @@ export class Militia extends Unit {
     super();
     this.name = "Militia";
   }
+}
+
+export enum SettlerWork {
+  Nothing,
+  Road,
+  RailRoad,
+  City,
+  Irrigation,
+  Fort,
+  Mine,
 }
