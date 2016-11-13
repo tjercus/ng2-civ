@@ -119,26 +119,25 @@ export class Board {
     return tile;
   }
 
-  public placeRoad(coord: Coord): void {
+  public placeRoad(coord: Coord, year: number): void {
     const tile: Tile = this._tiles.get(coord.valueOf());
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
-      // TODO start work instead of direct result
-
-      tile.surface.hasRoad = true;
-      this._tiles.set(coord.valueOf(), tile);
+      const s = <Settler> tile.unit;
+      s.startWork(SettlerWork.Road, year);
+      // TODO Settler needs to notify the Board or World the work is done
+      //tile.surface.hasRoad = true;
+      //this._tiles.set(coord.valueOf(), tile);
     } else {
       console.log(`no tile found at ${coord}`);
     }
   }
 
-  public placeCity(coord: Coord, city: City): void {
+  public placeCity(coord: Coord, city: City, year: number): void {
     const tile: Tile = this._tiles.get(coord.valueOf());
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
       // TODO start work instead of direct result
       const s = <Settler> tile.unit;
-      s.startWork(SettlerWork.City, this.year);
-      //tile.city = city;
-      //this._tiles.set(coord.valueOf(), tile);
+      s.startWork(SettlerWork.City, year, this.onWorkDoneCb);
     } else {
       console.log(`no tile found at ${coord}`);
     }
@@ -168,6 +167,13 @@ export class Board {
       res.push(coll.slice(i, i + size));
     }
     return res;
+  }
+
+  private onWorkDoneCb(obj) {
+    // TODO the work is done, now get details from obj to be able to update the board
+    // if (obj.workType = SettlerWork.City) {
+    //  tile.city = obj.city;
+    // this._tiles.set(coord.valueOf(), tile);
   }
 }
 

@@ -47,6 +47,7 @@ export class Settler extends Unit {
   // TODO perhaps encapsulate into a Work class so both will be updated atomically
   public workingOn: SettlerWork;
   public workFinishedInYear: number;
+  private workDoneCb = null;
 
   constructor() {
     super();
@@ -65,17 +66,22 @@ export class Settler extends Unit {
    * @param {number} currentYear as start year and finish year can be calculated based on duration of work
    * @return {void} none
    */
-  public startWork(work: SettlerWork, currentYear: number): void {
+  public startWork(work: SettlerWork, currentYear: number, workDoneCb: any): void {
     this.workingOn = work;
     this.workFinishedInYear = currentYear + 3;
+    this.workDoneCb = workDoneCb;
   }
 
   public onEndTurnNotification(newYear: number): void {
     if (this.workFinishedInYear === newYear) {
       this.workingOn = SettlerWork.Nothing;
       this.workFinishedInYear = null;
+      // call callback sent earlier by user of this Unit
+      // TODO pass details about work back to user
+      this.workDoneCb();
     }
   }
+
 }
 
 export class SailBoat extends Unit {

@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
     this.board.placeRoad(this.board.activeTile.coord);
   }
   onBuildCityClick() {
-    this.board.placeCity(this.board.activeTile.coord, new City());
+    this.board.placeCity(this.board.activeTile.coord, new City(), this.game.year);
   }
 
   onEndTurnClick() {
