@@ -1,4 +1,4 @@
-import {Unit, City, Settler, SailBoat} from "./units";
+import {Unit, City, Settler, SailBoat, SettlerWork} from "./units";
 
 export class Game {
   //public players: Array<Player> = [];
@@ -9,16 +9,20 @@ export class Game {
     this.board = board;
     const settler = new Settler();
     this.board.activeTile = this.board.placeUnit(Coord.create(2,3), settler);
-    // TODO a player should start with only one Settler and no boat
+    // TODO a player should start with only one Settler and no Boat
     this.board.placeUnit(Coord.create(2,0), new SailBoat());
   }
 
   /**
-   * TODO called by button and automatically when all units have no more actions
+   * called by button (and later automatically when Game detects all units have no more actions)
    */
   endTurn() {
     this.year++;
-    // TODO iterate over units for the (currently one) player and update their state?
+    console.log("Game.endTurn, now in year %f", this.year);
+    // TODO iterate over units for the (currently one) player and update their state
+    // TODO first a. register all units with Game or b. Iterate over Tiles and get them from Board?
+    //this.endTurnNotification();
+    this.board.notifyEndTurn(this.year);
   }
 }
 
@@ -69,8 +73,8 @@ export class Board {
 
   /**
    * Put a unit in a Tile on the board
-   * @param coord
-   * @param unit
+   * @param {Coord} coord where x, y
+   * @param {Unit} unit to set
    * @return {Tile} tile
    */
   public placeUnit(coord: Coord, unit: Unit): Tile {
@@ -91,7 +95,7 @@ export class Board {
   public moveUnit(tile: Tile, direction: Direction): Tile {
     const _tile: Tile = Tile.clone(tile);
     console.log(`moveUnit cloned a tile as: ${_tile}`);
-    // TODO plugable rules, some design pattern? Strategy/Visitor?
+    // TODO plug-able rules, some design pattern? Strategy/Visitor?
     // guard clause for 'no unit on tile'
     if (_tile === undefined || _tile === null) {
       console.log("moveUnit says you need to select a unit");
@@ -116,9 +120,10 @@ export class Board {
   }
 
   public placeRoad(coord: Coord): void {
-    // TODO check if there is a settler on the Tile
     const tile: Tile = this._tiles.get(coord.valueOf());
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
+      // TODO start work instead of direct result
+
       tile.surface.hasRoad = true;
       this._tiles.set(coord.valueOf(), tile);
     } else {
@@ -127,31 +132,35 @@ export class Board {
   }
 
   public placeCity(coord: Coord, city: City): void {
-    // TODO check if there is a settler on the Tile
     const tile: Tile = this._tiles.get(coord.valueOf());
-    if (tile && tile.surface instanceof Land) {
-      tile.city = city;
-      this._tiles.set(coord.valueOf(), tile);
+    if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
+      // TODO start work instead of direct result
+      const s = <Settler> tile.unit;
+      s.startWork(SettlerWork.City, this.year);
+      //tile.city = city;
+      //this._tiles.set(coord.valueOf(), tile);
     } else {
       console.log(`no tile found at ${coord}`);
     }
   }
 
   public get grid(): Array<Array<Tile>> {
-    const out: Array<Array<Tile>> = this.partition(5, Array.from(this._tiles.values()));
-    //console.log(`getGrid was called for ${JSON.stringify(out)}`);
-    return out;
+    return this.partition(5, Array.from(this._tiles.values()));
   }
 
   public findTile(coord: Coord): Tile {
     return this._tiles.get(coord.valueOf());
   }
 
+  public notifyEndTurn(newYear: number) {
+    this._tiles.forEach(_tile => _tile.unit.onEndTurnNotification(newYear));
+  }
+
   /**
    * Translate a Map of Tile to a 2d grid of Tile
    * @param {number} size of a row if tiles on grid
    * @param {Array<Tile>} coll
-   * @returns {Array<Array<Tile>>}
+   * @returns {Array<Array<Tile>>} 2d grid
    */
   private partition(size: number, coll: Array<Tile>): Array<Array<Tile>> {
     var res: Array<Array<Tile>> = [[]];

@@ -27,6 +27,10 @@ export class Unit {
   public hasActionLeft(): boolean {
     return (this.remainingMovePoints > 0);
   }
+
+  public onEndTurnNotification(newYear: number): void {
+    // no-op
+  }
 }
 
 export class City extends Unit {
@@ -40,6 +44,7 @@ export class City extends Unit {
 }
 
 export class Settler extends Unit {
+  // TODO perhaps encapsulate into a Work class so both will be updated atomically
   public workingOn: SettlerWork;
   public workFinishedInYear: number;
 
@@ -58,10 +63,18 @@ export class Settler extends Unit {
    * Note that stopWork is not supported for now, workStatus will change in workFinishedYear
    * @param {SettlerWork} work to do
    * @param {number} currentYear as start year and finish year can be calculated based on duration of work
+   * @return {void} none
    */
-  startWork(work: SettlerWork, currentYear: number) {
+  public startWork(work: SettlerWork, currentYear: number): void {
     this.workingOn = work;
     this.workFinishedInYear = currentYear + 3;
+  }
+
+  public onEndTurnNotification(newYear: number): void {
+    if (this.workFinishedInYear === newYear) {
+      this.workingOn = SettlerWork.Nothing;
+      this.workFinishedInYear = null;
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-import {Settler, SailBoat, City} from "../shared/units";
-import {Game, Coord, Tile, Board, Direction, Land, Sea} from "../shared/world";
+import {Settler, City} from "../shared/units";
+import {Game, Tile, Board, Direction, Land, Sea} from "../shared/world";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -78,5 +78,9 @@ export class HomeComponent implements OnInit {
   }
   onBuildCityClick() {
     this.board.placeCity(this.board.activeTile.coord, new City());
+  }
+
+  onEndTurnClick() {
+    this.game.endTurn();
   }
 }

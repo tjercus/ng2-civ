@@ -18,9 +18,12 @@
   <button (click)="onUpClick()">move up</button>
   <button (click)="onDownClick()">move down</button>
   <button (click)="onRightClick()">move right</button>
+  <button (click)="onEndTurnClick()">end turn</button>
 </nav>
 
 <nav class="buttonbar" *ngIf="toggleContextMenu">
   <button (click)="onBuildRoadClick()">build road</button>
   <button (click)="onBuildCityClick()">build city</button>
 </nav>
+
+
