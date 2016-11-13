@@ -6,8 +6,9 @@
 // export interface Aquatic {
 // }
 
+import {Tile} from "./world";
 export class Unit {
-  name: string;
+  name: string = "Unit";
   canMove: boolean = true;
   isAquatic: boolean = false;
   health: number = 100;
@@ -45,40 +46,44 @@ export class City extends Unit {
 
 export class Settler extends Unit {
   // TODO perhaps encapsulate into a Work class so both will be updated atomically
-  public workingOn: SettlerWork;
+  public workingOn: SettlerWorkType = SettlerWorkType.Nothing;
   public workFinishedInYear: number;
-  private workDoneCb = null;
+  private workDoneCb: Function = null;
+  private workTile: Tile = null;
 
   constructor() {
     super();
     this.name = "Settler";
-    this.workingOn = SettlerWork.Nothing;
-    this.workFinishedInYear = null;
 	}
 
 	public hasActionLeft(): boolean {
-    return this.remainingMovePoints > 0 || this.workingOn === SettlerWork.Nothing;
+    return this.remainingMovePoints > 0 || this.workingOn === SettlerWorkType.Nothing;
   }
 
   /**
    * Note that stopWork is not supported for now, workStatus will change in workFinishedYear
-   * @param {SettlerWork} work to do
+   * @param {SettlerWorkType} work to do
    * @param {number} currentYear as start year and finish year can be calculated based on duration of work
+   * @param {Tile} tile where the work is on
+   * @param {Function} workDoneCb callback to be called and executed on the using class
    * @return {void} none
    */
-  public startWork(work: SettlerWork, currentYear: number, workDoneCb: any): void {
+  public startWork(work: SettlerWorkType, currentYear: number, tile: Tile, workDoneCb: Function): void {
     this.workingOn = work;
     this.workFinishedInYear = currentYear + 3;
+    this.workTile = tile;
     this.workDoneCb = workDoneCb;
   }
 
   public onEndTurnNotification(newYear: number): void {
     if (this.workFinishedInYear === newYear) {
-      this.workingOn = SettlerWork.Nothing;
-      this.workFinishedInYear = null;
       // call callback sent earlier by user of this Unit
-      // TODO pass details about work back to user
-      this.workDoneCb();
+      //  and add details about work
+      this.workDoneCb(this.workingOn, this.workTile);
+      this.workDoneCb = null;
+      this.workingOn = SettlerWorkType.Nothing;
+      this.workFinishedInYear = null;
+      this.workTile = null;
     }
   }
 
@@ -99,7 +104,7 @@ export class Militia extends Unit {
   }
 }
 
-export enum SettlerWork {
+export enum SettlerWorkType {
   Nothing,
   Road,
   RailRoad,

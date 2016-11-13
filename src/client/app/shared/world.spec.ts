@@ -1,5 +1,5 @@
 import {Board, Coord, Direction, Tile, Game, Land} from "./world";
-import {Settler, Unit, SailBoat, Militia, SettlerWork} from "./units";
+import {Settler, Unit, SailBoat, Militia, SettlerWorkType} from "./units";
 
 export function main() {
 
@@ -68,7 +68,7 @@ export function main() {
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
-      settler.startWork(SettlerWork.Road, currentYear);
+      settler.startWork(SettlerWorkType.Road, currentYear);
       board.placeUnit(coord, settler);
       const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
       const oldTile: Tile = board.findTile(coord);

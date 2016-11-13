@@ -1,4 +1,4 @@
-import {Unit, City, Settler, SailBoat, SettlerWork} from "./units";
+import {Unit, City, Settler, SailBoat, SettlerWorkType} from "./units";
 
 export class Game {
   //public players: Array<Player> = [];
@@ -123,10 +123,7 @@ export class Board {
     const tile: Tile = this._tiles.get(coord.valueOf());
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
       const s = <Settler> tile.unit;
-      s.startWork(SettlerWork.Road, year);
-      // TODO Settler needs to notify the Board or World the work is done
-      //tile.surface.hasRoad = true;
-      //this._tiles.set(coord.valueOf(), tile);
+      s.startWork(SettlerWorkType.Road, year, tile, this.onWorkDoneCb);
     } else {
       console.log(`no tile found at ${coord}`);
     }
@@ -137,7 +134,7 @@ export class Board {
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
       // TODO start work instead of direct result
       const s = <Settler> tile.unit;
-      s.startWork(SettlerWork.City, year, this.onWorkDoneCb);
+      s.startWork(SettlerWorkType.City, year, tile, this.onWorkDoneCb);
     } else {
       console.log(`no tile found at ${coord}`);
     }
@@ -169,11 +166,17 @@ export class Board {
     return res;
   }
 
-  private onWorkDoneCb(obj) {
+  private onWorkDoneCb(workType: SettlerWorkType, tile: Tile) {
     // TODO the work is done, now get details from obj to be able to update the board
-    // if (obj.workType = SettlerWork.City) {
-    //  tile.city = obj.city;
-    // this._tiles.set(coord.valueOf(), tile);
+    if (workType === SettlerWorkType.City) {
+      // TODO pass city from Settler or let Settler handle tile
+      tile.city = new City(); //obj.city;
+    }
+    if (workType === SettlerWorkType.Road) {
+      // TODO let Settler handle tile?
+      tile.surface.hasRoad = true;
+    }
+    this._tiles.set(tile.coord.valueOf(), tile);
   }
 }
 
