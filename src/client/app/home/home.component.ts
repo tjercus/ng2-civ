@@ -74,10 +74,12 @@ export class HomeComponent implements OnInit {
   }
 
   onBuildRoadClick() {
-    this.board.placeRoad(this.board.activeTile.coord);
+    // TODO prevent double click
+    this.board.placeRoad(this.board.activeTile.coord, this.game.year);
   }
   onBuildCityClick() {
-    this.board.placeCity(this.board.activeTile.coord, new City(), this.game.year);
+    // TODO prevent double click
+    this.board.placeCity(this.board.activeTile.coord, this.game.year);
   }
 
   onEndTurnClick() {

@@ -32,7 +32,7 @@ export class Game {
  *  y = vertical
  */
 export class Board {
-  private _tiles: Map<String, Tile> = new Map<String, Tile>();
+  public _tiles: Map<String, Tile> = new Map<String, Tile>();
   private boardSize: number;
   public activeTile: Tile;
 
@@ -129,7 +129,7 @@ export class Board {
     }
   }
 
-  public placeCity(coord: Coord, city: City, year: number): void {
+  public placeCity(coord: Coord, year: number): void {
     const tile: Tile = this._tiles.get(coord.valueOf());
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
       // TODO start work instead of direct result
@@ -149,7 +149,9 @@ export class Board {
   }
 
   public notifyEndTurn(newYear: number) {
-    this._tiles.forEach(_tile => _tile.unit.onEndTurnNotification(newYear));
+    this._tiles.forEach(_tile => {
+      if (_tile.unit) _tile.unit.onEndTurnNotification(newYear);
+    });
   }
 
   /**
@@ -167,6 +169,7 @@ export class Board {
   }
 
   private onWorkDoneCb(workType: SettlerWorkType, tile: Tile) {
+    console.log(`World.onWorkDoneCb called`);
     // TODO the work is done, now get details from obj to be able to update the board
     if (workType === SettlerWorkType.City) {
       // TODO pass city from Settler or let Settler handle tile
@@ -176,6 +179,7 @@ export class Board {
       // TODO let Settler handle tile?
       tile.surface.hasRoad = true;
     }
+    // TODO in scope of passed callback, this._tiles is not available
     this._tiles.set(tile.coord.valueOf(), tile);
   }
 }
@@ -326,17 +330,3 @@ export enum Direction {
   Down,
   Left
 }
-
-// getKeyByValue(map: Map<String, Object>, value: string) {
-//   return map.keys.find(key => map[key] === value);
-// }
-
-/*
- this.board.getByObjectKey = function(key: Object): Object {
- this.board.forEach((_value, _key) => {
- if (key.equals(_key)) {
- return _value;
- }
- });
- };
- */

@@ -15,7 +15,7 @@ export class Unit {
   remainingMovePoints: number = 1;
 
   constructor() {
-    console.log(`name is ${this.name}`);
+    //console.log(`name is ${this.name}`);
   }
   public toString(): string {
     return this.name;
@@ -69,6 +69,7 @@ export class Settler extends Unit {
    * @return {void} none
    */
   public startWork(work: SettlerWorkType, currentYear: number, tile: Tile, workDoneCb: Function): void {
+    console.log(`Settler.startWork ${work} currentYear ${currentYear}`);
     this.workingOn = work;
     this.workFinishedInYear = currentYear + 3;
     this.workTile = tile;
@@ -76,6 +77,7 @@ export class Settler extends Unit {
   }
 
   public onEndTurnNotification(newYear: number): void {
+    console.log(`Unit received onEndTurnNotification, storing workDoneCb locally`);
     if (this.workFinishedInYear === newYear) {
       // call callback sent earlier by user of this Unit
       //  and add details about work
