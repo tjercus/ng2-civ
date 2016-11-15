@@ -45,9 +45,9 @@ export class City extends Unit {
 }
 
 export class Settler extends Unit {
-  // TODO perhaps encapsulate into a Work class so both will be updated atomically
-  public workingOn: SettlerWorkType = SettlerWorkType.Nothing;
-  public workFinishedInYear: number;
+  // TODO perhaps encapsulate into a Work class so all work related properties will be updated atomically
+  private workingOn: SettlerWorkType = SettlerWorkType.Nothing;
+  private workFinishedInYear: number;
   private workDoneCb: Function = null;
   private workTile: Tile = null;
 
@@ -65,23 +65,30 @@ export class Settler extends Unit {
    * @param {SettlerWorkType} work to do
    * @param {number} currentYear as start year and finish year can be calculated based on duration of work
    * @param {Tile} tile where the work is on
-   * @param {Function} workDoneCb callback to be called and executed on the using class
+   * @param {Function} workDoneCb callback to be called and executed on the using class (within it's bound context)
    * @return {void} none
    */
   public startWork(work: SettlerWorkType, currentYear: number, tile: Tile, workDoneCb: Function): void {
     console.log(`Settler.startWork ${work} currentYear ${currentYear}`);
     this.workingOn = work;
-    this.workFinishedInYear = currentYear + 3;
+    this.workFinishedInYear = currentYear + ((work === SettlerWorkType.City) ? 1 : 3);
     this.workTile = tile;
     this.workDoneCb = workDoneCb;
   }
 
   public onEndTurnNotification(newYear: number): void {
-    console.log(`Unit received onEndTurnNotification, storing workDoneCb locally`);
+    console.log(`Unit received onEndTurnNotification new year ${newYear}`);
     if (this.workFinishedInYear === newYear) {
+      if (this.workingOn === SettlerWorkType.City) {
+        this.workTile.city = new City();
+      }
+      if (this.workingOn === SettlerWorkType.Road) {
+        this.workTile.surface.hasRoad = true;
+      }
       // call callback sent earlier by user of this Unit
-      //  and add details about work
+      //  and add details about work, for notification
       this.workDoneCb(this.workingOn, this.workTile);
+
       this.workDoneCb = null;
       this.workingOn = SettlerWorkType.Nothing;
       this.workFinishedInYear = null;

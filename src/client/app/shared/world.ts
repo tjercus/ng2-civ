@@ -9,7 +9,7 @@ export class Game {
     this.board = board;
     const settler = new Settler();
     this.board.activeTile = this.board.placeUnit(Coord.create(2,3), settler);
-    // TODO a player should start with only one Settler and no Boat
+    // TODO a player should start with only one Settler and no Boat, in tests add a Boat when needed
     this.board.placeUnit(Coord.create(2,0), new SailBoat());
   }
 
@@ -19,9 +19,6 @@ export class Game {
   endTurn() {
     this.year++;
     console.log("Game.endTurn, now in year %f", this.year);
-    // TODO iterate over units for the (currently one) player and update their state
-    // TODO first a. register all units with Game or b. Iterate over Tiles and get them from Board?
-    //this.endTurnNotification();
     this.board.notifyEndTurn(this.year);
   }
 }
@@ -33,8 +30,8 @@ export class Game {
  */
 export class Board {
   public _tiles: Map<String, Tile> = new Map<String, Tile>();
-  private boardSize: number;
   public activeTile: Tile;
+  private boardSize: number;
 
   /**
    * Create a board that is boardSize wide, for now only 1 row is supported
@@ -81,6 +78,7 @@ export class Board {
     console.log(`Board.placeUnit ${unit} @ ${coord}`);
     const tile: Tile = this._tiles.get(coord.valueOf());
     tile.unit = unit;
+    // TODO since pass by ref, the next line could probably be removed if there will be no cloning
     this._tiles.set(coord.valueOf(), tile);
     return tile;
   }
@@ -94,47 +92,46 @@ export class Board {
    */
   public moveUnit(tile: Tile, direction: Direction): Tile {
     const _tile: Tile = Tile.clone(tile);
-    console.log(`moveUnit cloned a tile as: ${_tile}`);
     // TODO plug-able rules, some design pattern? Strategy/Visitor?
-    // guard clause for 'no unit on tile'
     if (_tile === undefined || _tile === null) {
       console.log("moveUnit says you need to select a unit");
       throw new Error("moveUnit says you need to select a unit");
     }
     const newCoord: Coord = Coord.createInDirection(_tile.coord, direction);
     const toTile: Tile = this.findTile(newCoord);
-    console.log(`moveUnit trying to move a unit to Tile: [${JSON.stringify(toTile)}]`);
-    if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit) && _tile.unit.hasActionLeft()) {
+    if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit)
+      && _tile.unit.hasActionLeft()) {
       toTile.unit = _tile.unit;
       _tile.unit = null;
       this._tiles.set(_tile.coord.valueOf(), _tile);
       this._tiles.set(newCoord.valueOf(), toTile);
-      //console.dir(this._tiles);
-      console.log(`moveUnit moved a unit to Tile: [${JSON.stringify(toTile)}]`);
-      console.log(`moveUnit left the old tile as: [${JSON.stringify(_tile)}]`);
-      //console.log(`the board: ${JSON.stringify(this._tiles)}`);
       return toTile;
     }
     console.log(`moveUnit cannot move to Tile @ ${newCoord} returning original ${tile}`);
     return tile;
   }
 
-  public placeRoad(coord: Coord, year: number): void {
+  /**
+   * Note that since 'tile' is a reference, it will be updated, no this._tiles.set is needed
+   * @param {Coord} coord
+   * @param {number} year
+   */
+  public buildRoad(coord: Coord, year: number): void {
     const tile: Tile = this._tiles.get(coord.valueOf());
+    console.log(`Board.buildRoad() tile found as ${tile}`);
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
       const s = <Settler> tile.unit;
-      s.startWork(SettlerWorkType.Road, year, tile, this.onWorkDoneCb);
+      s.startWork(SettlerWorkType.Road, year, tile, this.onWorkDoneCb.bind(this));
     } else {
-      console.log(`no tile found at ${coord}`);
+      console.log(`Board.buildRoad() no tile or settler found at ${coord}`);
     }
   }
 
-  public placeCity(coord: Coord, year: number): void {
+  public buildCity(coord: Coord, year: number): void {
     const tile: Tile = this._tiles.get(coord.valueOf());
     if (tile && tile.surface instanceof Land && tile.unit instanceof Settler) {
-      // TODO start work instead of direct result
       const s = <Settler> tile.unit;
-      s.startWork(SettlerWorkType.City, year, tile, this.onWorkDoneCb);
+      s.startWork(SettlerWorkType.City, year, tile, this.onWorkDoneCb.bind(this));
     } else {
       console.log(`no tile found at ${coord}`);
     }
@@ -168,19 +165,9 @@ export class Board {
     return res;
   }
 
-  private onWorkDoneCb(workType: SettlerWorkType, tile: Tile) {
-    console.log(`World.onWorkDoneCb called`);
-    // TODO the work is done, now get details from obj to be able to update the board
-    if (workType === SettlerWorkType.City) {
-      // TODO pass city from Settler or let Settler handle tile
-      tile.city = new City(); //obj.city;
-    }
-    if (workType === SettlerWorkType.Road) {
-      // TODO let Settler handle tile?
-      tile.surface.hasRoad = true;
-    }
-    // TODO in scope of passed callback, this._tiles is not available
-    this._tiles.set(tile.coord.valueOf(), tile);
+  private onWorkDoneCb(workType: SettlerWorkType, tile: Tile): void {
+    console.log(`World.onWorkDoneCb called saying ${workType} is done for ${tile}`);
+    console.dir(this._tiles);
   }
 }
 
