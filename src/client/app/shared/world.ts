@@ -100,9 +100,9 @@ export class Board {
     const newCoord: Coord = Coord.createInDirection(_tile.coord, direction);
     const toTile: Tile = this.findTile(newCoord);
     if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit)
-      && _tile.unit.hasActionLeft()) {
+        && _tile.unit.hasActionLeft()) {
       toTile.unit = _tile.unit;
-      toTile.unit.remainingMovePoints = 0;
+      toTile.unit.remainingMovePoints--;
       _tile.unit = null;
       this._tiles.set(_tile.coord.valueOf(), _tile);
       this._tiles.set(newCoord.valueOf(), toTile);

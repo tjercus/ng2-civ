@@ -66,8 +66,8 @@ export function main() {
     });
   });
 
-  fdescribe("Board.hasActionLeft", () => {
-    fit("should return false when it is working on something", () => {
+  describe("Board.hasActionLeft", () => {
+    it("should return false when it is working on something", () => {
       const currentYear: number = 1;
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
@@ -77,14 +77,14 @@ export function main() {
       expect(tile.unit.hasActionLeft()).toEqual(false);
       //expect(settler.hasActionLeft()).toEqual(false);
     });
-    fit("should return true when it is not working on something", () => {
+    it("should return true when it is not working on something", () => {
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
       expect(settler.hasActionLeft()).toEqual(true);
     });
-    fit("should return false when it has moved in this turn", () => {
+    it("should return false when it has moved in this turn", () => {
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
@@ -92,7 +92,7 @@ export function main() {
       board.moveUnit(board.findTile(coord), Direction.Right);
       expect(settler.hasActionLeft()).toEqual(false);
     });
-    fit("should return true when it has not moved in this turn", () => {
+    it("should return true when it has not moved in this turn", () => {
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
@@ -124,7 +124,7 @@ export function main() {
       expect(settler.hasActionLeft()).toEqual(false);
       const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
       const oldTile: Tile = board.findTile(coord);
-      expect(newTile.unit).toBe(null);
+      expect(oldTile).toEqual(newTile);
       expect(oldTile.unit instanceof Settler).toBe(true);
     });
 
