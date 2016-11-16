@@ -10,13 +10,12 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
- # EPIC 2 (turns and Settler work)
+ - Use images instead of toString for tiles in template
  - Disallow a Road and a City on the same Tile
  - Prevent Settler from working on 2 items at the same time
  - Fix hiding the dashboard with context actions for a Settler
  - Land units should be able to move more than one square per turn
- 
- - Support Mountains
+  - Support Mountains
  - Use Icons for Surfaces and Units
  - Introduce City Unit
  - Introduce multiple Units per Board and Turn

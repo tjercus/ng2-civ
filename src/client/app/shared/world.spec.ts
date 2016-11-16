@@ -28,8 +28,6 @@ export function main() {
       const tile = board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
       [2,3,4].forEach((y) => {board.notifyEndTurn(y)});
-      //expect(y).toEqual(4);
-      //const tile: Tile = board.findTile(coord);
       expect(tile.surface.hasRoad).toEqual(true);
     });
     it("should NOT place a road on a Land Surface if there is no Settler on it", () => {
