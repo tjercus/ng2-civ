@@ -30,7 +30,9 @@ export class Unit {
   }
 
   public onEndTurnNotification(newYear: number): void {
-    // no-op
+    // TODO fix
+    console.log("Unit end turn resetting movepoints");
+    this.remainingMovePoints = 1;
   }
 }
 
@@ -57,7 +59,7 @@ export class Settler extends Unit {
 	}
 
 	public hasActionLeft(): boolean {
-    return this.remainingMovePoints > 0 || this.workingOn === SettlerWorkType.Nothing;
+    return this.remainingMovePoints > 0 && this.workingOn === SettlerWorkType.Nothing;
   }
 
   /**
@@ -77,6 +79,7 @@ export class Settler extends Unit {
   }
 
   public onEndTurnNotification(newYear: number): void {
+    super.onEndTurnNotification(newYear);
     console.log(`Unit received onEndTurnNotification new year ${newYear}`);
     if (this.workFinishedInYear === newYear) {
       if (this.workingOn === SettlerWorkType.City) {

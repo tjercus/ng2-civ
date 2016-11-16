@@ -102,6 +102,7 @@ export class Board {
     if (toTile !== undefined && toTile.surface.isNavigateableWith(_tile.unit)
       && _tile.unit.hasActionLeft()) {
       toTile.unit = _tile.unit;
+      toTile.unit.remainingMovePoints = 0;
       _tile.unit = null;
       this._tiles.set(_tile.coord.valueOf(), _tile);
       this._tiles.set(newCoord.valueOf(), toTile);
