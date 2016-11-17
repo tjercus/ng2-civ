@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     this.grid = this.board.grid;
   }
 
-  setCssClasses(tile: Tile) {
+  setCssClasses(tile: Tile): Object {
     return {
       "tile-selected": this.isSelected(tile),
       "surface-sea": tile.surface instanceof Sea,
@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getTileImagePath(tile: Tile) {
+  getTileImagePath(tile: Tile): string {
     if (tile.surface instanceof Sea) {
       return "./assets/tile-sea.png";
     }
@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit {
     if (tile.surface instanceof Land) {
       return "./assets/tile-grass.png";
     }
+    return "";
     // TODO City
     // TODO Mountain etc.
   }
