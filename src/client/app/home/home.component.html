@@ -7,7 +7,6 @@
           [ngClass]="setCssClasses(tile)"
           (click)="onSelectTileClick(tile)"
           attr.data-coord="{{tile.coord}}">
-        {{(tile.unit) ? tile.unit.toString() : ""}}
         <img [attr.src]="getTileImagePath(tile)" alt="tile" />
       </td>
     </tr>

@@ -1,5 +1,5 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-import {Settler, City} from "../shared/units";
+import {Settler, City, SailBoat} from "../shared/units";
 import {Game, Tile, Board, Direction, Land, Sea} from "../shared/world";
 
 /**
@@ -46,6 +46,12 @@ export class HomeComponent implements OnInit {
   }
 
   getTileImagePath(tile: Tile): string {
+    if (tile.unit instanceof Settler) {
+      return "./assets/unit-settler.png";
+    }
+    if (tile.unit instanceof SailBoat) {
+      return "./assets/unit-sailboat.png";
+    }
     if (tile.surface instanceof Sea) {
       return "./assets/tile-sea.png";
     }
@@ -55,6 +61,7 @@ export class HomeComponent implements OnInit {
     if (tile.surface instanceof Land) {
       return "./assets/tile-grass.png";
     }
+
     return "";
     // TODO City
     // TODO Mountain etc.
