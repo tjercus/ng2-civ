@@ -10,15 +10,19 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
- - Use images instead of toString for tiles in template
+ - Use images instead of toString for tiles in template (use Icons for Surfaces and Units)
  - Disallow a Road and a City on the same Tile
- - Prevent Settler from working on 2 items at the same time
+ - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
  - Fix hiding the dashboard with context actions for a Settler
  - Land units should be able to move more than one square per turn
-  - Support Mountains
- - Use Icons for Surfaces and Units
- - Introduce City Unit
- - Introduce multiple Units per Board and Turn
+ - Support Mountains
+
+ # EPIC #2 City (Flesh out City concept some more)
+ - Introduce Buildings
+ - Introduce Production of units (depending on Cost of a unit and City production per turn)
+ - Introduce Food harvested per turn
+ - Growth of a City
+
  - Introduce Hitpoints
  - Introduce Health
  - Introduce Attack

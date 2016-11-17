@@ -45,6 +45,20 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  getTileImagePath(tile: Tile) {
+    if (tile.surface instanceof Sea) {
+      return "./assets/tile-sea.png";
+    }
+    if (tile.surface instanceof Land && tile.surface.hasRoad) {
+      return "./assets/tile-grass-road.png";
+    }
+    if (tile.surface instanceof Land) {
+      return "./assets/tile-grass.png";
+    }
+    // TODO City
+    // TODO Mountain etc.
+  }
+
   isSelected(tile: Tile): boolean {
     return this.board.activeTile !== null && this.board.activeTile.equals(tile);
   }

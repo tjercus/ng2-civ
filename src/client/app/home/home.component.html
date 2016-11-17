@@ -1,4 +1,4 @@
-<h2>World {{game.year}}</h2>
+<h2>World in year {{game.year}}</h2>
 
 <table>
   <tbody>
@@ -7,7 +7,8 @@
           [ngClass]="setCssClasses(tile)"
           (click)="onSelectTileClick(tile)"
           attr.data-coord="{{tile.coord}}">
-        {{tile.toString()}}
+        {{(tile.unit) ? tile.unit.toString() : ""}}
+        <img [attr.src]="getTileImagePath(tile)" alt="tile" />
       </td>
     </tr>
   </tbody>

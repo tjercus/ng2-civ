@@ -38,11 +38,15 @@ export class Unit {
 
 export class City extends Unit {
   public size: number = 1;
+
   constructor(name: string = `City${Math.floor(Math.random() * (9999))}`) {
     super();
     this.name = name;
     this.canMove = false;
     this.remainingMovePoints = 1;
+  }
+  public hasActionLeft(): boolean {
+    return false; // Settlers never have actions left
   }
 }
 
