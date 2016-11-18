@@ -39,10 +39,16 @@ export class HomeComponent implements OnInit {
 
   setCssClasses(tile: Tile): Object {
     return {
-      "tile-selected": this.isSelected(tile),
+      "tile-selected blink": this.isSelected(tile),
       "surface-sea": tile.surface instanceof Sea,
       "surface-land": tile.surface instanceof Land,
     }
+  }
+
+  setSettlerContextMenuCss(): string {
+    const showContextMenu = this.board.hasActiveTile() && this.board.activeTile.unit !== null && this.board.activeTile.unit instanceof Settler;
+    console.log(`showContextMenu: ${showContextMenu}: Settler? ${this.board.activeTile.unit instanceof Settler}`);
+    return (showContextMenu === true) ? "" : "hidden";
   }
 
   getTileImagePath(tile: Tile): string {
@@ -61,7 +67,6 @@ export class HomeComponent implements OnInit {
     if (tile.surface instanceof Land) {
       return "./assets/tile-grass.png";
     }
-
     return "";
     // TODO City
     // TODO Mountain etc.
@@ -71,40 +76,37 @@ export class HomeComponent implements OnInit {
     return this.board.activeTile !== null && this.board.activeTile.equals(tile);
   }
 
-  onSelectTileClick(tile: Tile) {
+  onSelectTileClick(tile: Tile): void {
     this.board.activeTile = tile;
     console.log(`HomeComponent onSelectTileClick ${tile.toString()}`);
   }
 
-  toggleContextMenu() {
-    return this.board.activeTile &&
-      this.board.activeTile.unit &&
-      this.board.activeTile.unit instanceof Settler;
-  }
-
-  onUpClick() {
+  onUpClick(): void {
     this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Up);
   }
-  onRightClick() {
+  onRightClick(): void {
     this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Right);
   }
-  onDownClick() {
+  onDownClick(): void {
     this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Down);
   }
-  onLeftClick() {
+  onLeftClick(): void {
     this.board.activeTile = this.board.moveUnit(this.board.activeTile, Direction.Left);
   }
 
-  onBuildRoadClick() {
+  onBuildRoadClick(): void {
     // TODO prevent double click
     this.board.buildRoad(this.board.activeTile.coord, this.game.year);
   }
-  onBuildCityClick() {
+  onBuildCityClick(): void {
     // TODO prevent double click
     this.board.buildCity(this.board.activeTile.coord, this.game.year);
   }
 
-  onEndTurnClick() {
+  /**
+   * The GUI communicates to the Board Domain Object that the turn is finished
+   */
+  onEndTurnClick(): void {
     this.game.endTurn();
   }
 }

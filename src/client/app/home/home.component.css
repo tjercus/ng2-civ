@@ -18,8 +18,8 @@ ul {
 .tile, .tile-selected, .surface-land, .surface-sea {
   display: inline-block;
   border: 0;
-  height: 61px;
-  width: 61px;
+  height: 60px;
+  width: 60px;
   padding: 0;
   text-align: center;
   vertical-align: middle;
@@ -33,9 +33,28 @@ ul {
   background: LightGreen url("../../assets/tile-grass.png");
 }
 .surface-sea {
-  background-color: LightBlue;
+  background-color: #9ca6d9;
 }
 
 .buttonbar {
   margin: 1em;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+.blink {
+  animation: blink 2s step-start 0s infinite;
+  -webkit-animation: blink 2s step-start 0s infinite;
+}
+
+.hidden {
+  display: none;
 }

@@ -170,6 +170,12 @@ export class Board {
     console.log(`World.onWorkDoneCb called saying ${workType} is done for ${tile}`);
     console.dir(this._tiles);
   }
+
+  hasActiveTile(): boolean {
+    console.log(`Board.hasActiveTile ${this.activeTile instanceof Tile}`);
+    return this.activeTile instanceof Tile;
+    //return this.activeTile !== undefined && this.activeTile !== null;
+  }
 }
 
 /**

@@ -10,18 +10,24 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
- - Use images instead of toString for tiles in template (use Icons for Surfaces and Units)
+  - Add icon or css for a city with size nr
  - Disallow a Road and a City on the same Tile
  - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
- - Fix hiding the dashboard with context actions for a Settler
  - Land units should be able to move more than one square per turn
- - Support Mountains
+ - Support Mountains with slower movement
 
  # EPIC #2 City (Flesh out City concept some more)
  - Introduce Buildings
  - Introduce Production of units (depending on Cost of a unit and City production per turn)
  - Introduce Food harvested per turn
  - Growth of a City
+
+ #EPIC #3 more subtle production/tiletypes
+ - Introduce Sea with Fish
+ - Introduce Grass with fertile spots (yellow dots in Civ1)
+ - Introduce Forest
+ - Introduce River
+ - Introduce Goldmine and Coalmine
 
  - Introduce Hitpoints
  - Introduce Health

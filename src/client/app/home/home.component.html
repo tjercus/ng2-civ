@@ -7,6 +7,7 @@
           [ngClass]="setCssClasses(tile)"
           (click)="onSelectTileClick(tile)"
           attr.data-coord="{{tile.coord}}">
+        <!-- // TODO hide image when function return no path -->
         <img [attr.src]="getTileImagePath(tile)" alt="tile" />
       </td>
     </tr>
@@ -14,14 +15,17 @@
 </table>
 
 <nav class="buttonbar">
+  <button (click)="onEndTurnClick()">end turn</button>
+</nav>
+
+<nav class="buttonbar">
   <button (click)="onLeftClick()">move left</button>
   <button (click)="onUpClick()">move up</button>
   <button (click)="onDownClick()">move down</button>
   <button (click)="onRightClick()">move right</button>
-  <button (click)="onEndTurnClick()">end turn</button>
 </nav>
 
-<nav class="buttonbar" *ngIf="toggleContextMenu">
+<nav class="buttonbar" [ngClass]="setSettlerContextMenuCss()">
   <button (click)="onBuildRoadClick()">build road</button>
   <button (click)="onBuildCityClick()">build city</button>
 </nav>

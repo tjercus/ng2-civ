@@ -10,6 +10,14 @@ export function main() {
     });
   });
 
+  describe("Game.endTurn", () => {
+    it("should update year", () => {
+      const game: Game = new Game(new Board());
+      game.endTurn();
+      expect(game.year).toEqual(2);
+    });
+  });
+
   describe("Board.placeUnit", () => {
     it("should place a Unit on a Coord", () => {
       const board: Board = new Board(5);
@@ -61,6 +69,19 @@ export function main() {
 
   describe("Board.buildCity", () => {
     it("should place a City on a Land Surface if there is a Settler on it", () => {
+    });
+  });
+
+  describe("Board.hasActiveTile", () => {
+    it("should be false when board is created", () => {
+      const board = new Board();
+      expect(board.hasActiveTile()).toBeFalsy();
+    });
+    it("should be true when a tile is selected", () => {
+      const board = new Board();
+      const settler = new Settler();
+      board.activeTile = board.placeUnit(Coord.create(2,3), settler);
+      expect(board.hasActiveTile()).toBeTruthy();
     });
   });
 
