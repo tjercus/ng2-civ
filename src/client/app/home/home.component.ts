@@ -52,6 +52,9 @@ export class HomeComponent implements OnInit {
   }
 
   getTileImagePath(tile: Tile): string {
+    if (tile.unit instanceof City) {
+      return "./assets/unit-city.png";
+    }
     if (tile.unit instanceof Settler) {
       return "./assets/unit-settler.png";
     }

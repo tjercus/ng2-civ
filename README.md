@@ -10,11 +10,12 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
-  - Add icon or css for a city with size nr
+ - Fix bug on City not being diaplayed
  - Disallow a Road and a City on the same Tile
  - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
  - Land units should be able to move more than one square per turn
  - Support Mountains with slower movement
+ - Add css for City Size nr
 
  # EPIC #2 City (Flesh out City concept some more)
  - Introduce Buildings
