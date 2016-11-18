@@ -39,7 +39,8 @@ export class HomeComponent implements OnInit {
 
   setCssClasses(tile: Tile): Object {
     return {
-      "tile-selected blink": this.isSelected(tile),
+      "tile-selected": this.isSelected(tile),
+      "blink": this.isSelected(tile) && (tile.hasOwnProperty("unit") && tile.unit.hasActionLeft()),
       "surface-sea": tile.surface instanceof Sea,
       "surface-land": tile.surface instanceof Land,
     }
@@ -52,7 +53,7 @@ export class HomeComponent implements OnInit {
   }
 
   getTileImagePath(tile: Tile): string {
-    if (tile.unit instanceof City) {
+    if (tile.hasOwnProperty("city") && tile.city instanceof City) {
       return "./assets/unit-city.png";
     }
     if (tile.unit instanceof Settler) {

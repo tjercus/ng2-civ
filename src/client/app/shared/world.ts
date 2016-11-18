@@ -159,8 +159,8 @@ export class Board {
    * @returns {Array<Array<Tile>>} 2d grid
    */
   private partition(size: number, coll: Array<Tile>): Array<Array<Tile>> {
-    var res: Array<Array<Tile>> = [[]];
-    for (var i = 0, l = coll.length; i < l; i += size) {
+    const res: Array<Array<Tile>> = [[]];
+    for (let i = 0, l = coll.length; i < l; i += size) {
       res.push(coll.slice(i, i + size));
     }
     return res;
