@@ -1,12 +1,7 @@
 // units.ts
 
-// export interface Moveable {
-//   // TODO
-// }
-// export interface Aquatic {
-// }
-
 import {Tile} from "./world";
+
 export class Unit {
   name: string = "Unit";
   attack: number = 1;
@@ -71,16 +66,22 @@ export class City extends Unit {
     if (this.canGrow()) {
       this.size++;
       this.food = this.food - this.calculateGrowCost();
+    } else {
+      console.log(`City.onEndTurnNotification, canGrow ${this.canGrow()} granary? ${this.hasGranary()}`);
     }
     console.log(`City.onEndTurnNotification, size ${this.size} and food: ${this.food}`);
   }
   private canGrow = () => (this.food >= this.calculateGrowCost());
-  private findGranary(building: Building): boolean { return building instanceof Granary };
+  //private findGranary(building: Building): boolean { return building instanceof Granary };
   private hasGranary = () => {
-    let has = this.units.find(this.findGranary);
+    let has = false;
+    // TODO use find/findIndex
+    this.buildings.forEach((building) => {
+      if (building instanceof Granary) has = true
+    });
     console.log(`hasGranary ${has}`);
     return has;
-  }
+  };
   private calculateGrowCost = () => (this.hasGranary()) ? 5 : 10;
   private calculateUnitsUpkeepCost = () => this.units.length;
 }
@@ -160,6 +161,9 @@ class Building {}
 
 export class Granary extends Building {
   // City uses only 50% of Food for growth.
+}
+export class Wall extends Building {
+  // improve defence by 100%
 }
 
 export enum SettlerWorkType {

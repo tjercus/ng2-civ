@@ -30,7 +30,7 @@ export function main() {
     it("should increase size faster when a granary is present", () => {
       const city: City = new City();
       city.buildings.push(new Granary());
-      endTurn(city, 6);
+      endTurn(city, 5);
       expect(city.size).toEqual(2);
       expect(city.food).toEqual(0);
     });
@@ -42,7 +42,14 @@ export function main() {
       city.onEndTurnNotification(2);
       expect(city.food).toEqual(0);
     });
-
+    it("should decrease food supplies when a city has two unit settled", () => {
+      const city: City = new City();
+      const militia: Militia = new Militia();
+      const militia2: Militia = new Militia();
+      city.units.push(militia, militia2);
+      city.onEndTurnNotification(2);
+      expect(city.food).toEqual(-1);
+    });
   });
 
 }

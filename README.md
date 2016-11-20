@@ -11,13 +11,10 @@ npm run start.deving
 
 ## TODO
  # EPIC #2 City (Flesh out City concept some more)
- - Introduce Warrior and allow it to settle in city.units
- - Introduce upkeep cost for city.units
+ - Allow Warrior to settle in city.units via context menu
  - Create CityEdit modal component, activated when doubleclicking on a city
  - Introduce Production of units (depending on Cost of a unit and City production per turn)
- - Growth of a City
  - Add css for City Size nr
- - Buildings should influence production and food
 
  #EPIC #3 more subtle production/tiletypes
  - Introduce Sea with Fish
@@ -32,7 +29,6 @@ npm run start.deving
  - Introduce Railroad
  - Introduce Research, Tech Tree
  - Allow boardConfig options so a map can be passed from JSON or yaml or whatever
-
  - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
  - Land units should be able to move more than one square per turn on road
  - Support Mountains with slower movement
