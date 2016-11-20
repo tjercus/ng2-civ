@@ -33,7 +33,7 @@ ul {
   background: LightGreen url("../../assets/tile-grass.png");
 }
 .surface-sea {
-  background-color: #9ca6d9;
+  background-color: #56aff2;
 }
 
 .buttonbar {
@@ -51,10 +51,14 @@ ul {
   }
 }
 .blink {
-  animation: blink 2s step-start 0s infinite;
-  -webkit-animation: blink 2s step-start 0s infinite;
+  animation: blink 1s step-start 0s infinite;
+  -webkit-animation: blink 1s step-start 0s infinite;
 }
 
 .hidden {
   display: none;
+}
+
+table {
+  border-collapse: collapse;
 }

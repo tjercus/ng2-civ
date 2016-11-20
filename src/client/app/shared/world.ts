@@ -149,6 +149,7 @@ export class Board {
   public notifyEndTurn(newYear: number) {
     this._tiles.forEach(_tile => {
       if (_tile.unit) _tile.unit.onEndTurnNotification(newYear);
+      if (_tile.city) _tile.city.onEndTurnNotification(newYear);
     });
   }
 

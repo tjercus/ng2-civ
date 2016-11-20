@@ -9,6 +9,8 @@
 import {Tile} from "./world";
 export class Unit {
   name: string = "Unit";
+  attack: number = 1;
+  defence: number = 1;
   canMove: boolean = true;
   isAquatic: boolean = false;
   health: number = 100;
@@ -38,16 +40,45 @@ export class Unit {
 
 export class City extends Unit {
   public size: number = 1;
+  public buildings: Array<Building> = [];
+  public units: Array<Unit> = [];
+  public production: number = 0;
+  public food: number = 0;
 
   constructor(name: string = `City${Math.floor(Math.random() * (9999))}`) {
     super();
     this.name = name;
     this.canMove = false;
-    this.remainingMovePoints = 1;
+  }
+  public productionPerTurn(): number {
+    return 1;
+  }
+
+  /**
+   * Food added to storage or taken out for extra upkeep.
+   * @returns {number} more or less can be negative or positive depending on balance
+   */
+  public foodPerTurn(): number {
+    const f: number = 1 - this.calculateUnitsUpkeepCost();
+    return f;
   }
   public hasActionLeft(): boolean {
-    return false; // Settlers never have actions left
+    return false; // Cities never have actions left
   }
+  public onEndTurnNotification(newYear: number): void {
+    this.production = this.production + this.productionPerTurn();
+    this.food = this.food + this.foodPerTurn();
+    if (this.canGrow()) {
+      this.size++;
+      this.food = this.food - this.calculateGrowCost();
+    }
+    console.log(`City.onEndTurnNotification, size ${this.size} and food: ${this.food}`);
+  }
+  private canGrow = () => (this.food >= this.calculateGrowCost());
+  private findGranary(building: Building): boolean { return building instanceof Granary };
+  private hasGranary = () => this.units.find(this.findGranary);
+  private calculateGrowCost = () => (this.hasGranary()) ? 5 : 10;
+  private calculateUnitsUpkeepCost = () => this.units.length;
 }
 
 export class Settler extends Unit {
@@ -114,10 +145,17 @@ export class SailBoat extends Unit {
 }
 
 export class Militia extends Unit {
+
   constructor() {
     super();
     this.name = "Militia";
   }
+}
+
+class Building {}
+
+export class Granary extends Building {
+  // City uses only 50% of Food for growth.
 }
 
 export enum SettlerWorkType {

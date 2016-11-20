@@ -10,18 +10,14 @@ In order to start the seed use:
 npm run start.deving
 
 ## TODO
- - Fix bug on City not being diaplayed
- - Disallow a Road and a City on the same Tile
- - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
- - Land units should be able to move more than one square per turn
- - Support Mountains with slower movement
- - Add css for City Size nr
-
  # EPIC #2 City (Flesh out City concept some more)
- - Introduce Buildings
+ - Introduce Warrior and allow it to settle in city.units
+ - Introduce upkeep cost for city.units
+ - Create CityEdit modal component, activated when doubleclicking on a city
  - Introduce Production of units (depending on Cost of a unit and City production per turn)
- - Introduce Food harvested per turn
  - Growth of a City
+ - Add css for City Size nr
+ - Buildings should influence production and food
 
  #EPIC #3 more subtle production/tiletypes
  - Introduce Sea with Fish
@@ -36,6 +32,10 @@ npm run start.deving
  - Introduce Railroad
  - Introduce Research, Tech Tree
  - Allow boardConfig options so a map can be passed from JSON or yaml or whatever
+
+ - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
+ - Land units should be able to move more than one square per turn on road
+ - Support Mountains with slower movement
 
 ## Research
  - http://stackoverflow.com/questions/34556277/angular2-table-rows-as-component#34556489
