@@ -76,7 +76,11 @@ export class City extends Unit {
   }
   private canGrow = () => (this.food >= this.calculateGrowCost());
   private findGranary(building: Building): boolean { return building instanceof Granary };
-  private hasGranary = () => this.units.find(this.findGranary);
+  private hasGranary = () => {
+    let has = this.units.find(this.findGranary);
+    console.log(`hasGranary ${has}`);
+    return has;
+  }
   private calculateGrowCost = () => (this.hasGranary()) ? 5 : 10;
   private calculateUnitsUpkeepCost = () => this.units.length;
 }

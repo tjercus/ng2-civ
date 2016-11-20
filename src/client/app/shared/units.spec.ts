@@ -1,5 +1,11 @@
 import {City, Militia, Granary} from "./units";
 
+const endTurn = (city, x) => {
+  for (let i = 0; i < x; i++) {
+    city.onEndTurnNotification(i);
+  }
+}
+
 export function main() {
 
   describe("City", () => {
@@ -16,16 +22,17 @@ export function main() {
     });
     it("should increase size after turn ends and enough extra food is available", () => {
       const city: City = new City();
-      city.onEndTurnNotification(2); // TODO enough turns to increase size
+      // enough turns to increase size
+      endTurn(city, 10);
       expect(city.size).toEqual(2);
-      expect(city.food).toEqual(1);
+      expect(city.food).toEqual(0);
     });
     it("should increase size faster when a granary is present", () => {
       const city: City = new City();
       city.buildings.push(new Granary());
-      city.onEndTurnNotification(2); // TODO enough turns to increase size
+      endTurn(city, 6);
       expect(city.size).toEqual(2);
-      expect(city.food).toEqual(1);
+      expect(city.food).toEqual(0);
     });
 
     it("should decrease food supplies when a city has a unit settled", () => {
