@@ -1,6 +1,6 @@
 <h2>World in year {{game.year}}</h2>
 
-<table>
+<table id="board-table">
   <tbody>
     <tr *ngFor="let row of grid">
       <td *ngFor="let tile of row"
@@ -23,11 +23,10 @@
   <button (click)="onUpClick()">move up</button>
   <button (click)="onDownClick()">move down</button>
   <button (click)="onRightClick()">move right</button>
+  <button (click)="onSettleUnitInCityClick()" [ngClass]="setSettleCss()">Settle in City</button>
 </nav>
 
 <nav class="buttonbar" [ngClass]="setSettlerContextMenuCss()">
   <button (click)="onBuildRoadClick()">build road</button>
   <button (click)="onBuildCityClick()">build city</button>
 </nav>
-
-

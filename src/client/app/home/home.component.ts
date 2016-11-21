@@ -40,20 +40,29 @@ export class HomeComponent implements OnInit {
   setCssClasses(tile: Tile): Object {
     return {
       "tile-selected": this.isSelected(tile),
-      "blink": this.isSelected(tile) && (tile.hasOwnProperty("unit") && tile.unit.hasActionLeft()),
+      "blink": this.isSelected(tile) && (tile.hasUnit() && tile.unit.hasActionLeft()),
       "surface-sea": tile.surface instanceof Sea,
       "surface-land": tile.surface instanceof Land,
     }
   }
 
   setSettlerContextMenuCss(): string {
-    const showContextMenu = this.board.hasActiveTile() && this.board.activeTile.unit !== null && this.board.activeTile.unit instanceof Settler;
+    const showContextMenu = this.board.hasActiveTile() && this.board.activeTile.hasUnit() && this.board.activeTile.unit instanceof Settler;
     console.log(`showContextMenu: ${showContextMenu}: Settler? ${this.board.activeTile.unit instanceof Settler}`);
     return (showContextMenu === true) ? "" : "hidden";
   }
 
+  // TODO fix
+  setSettleCss(): Object {
+    return {
+      "hidden": !(this.board.hasActiveTile() &&
+        this.board.activeTile.hasUnit() &&
+        this.board.activeTile.hasCity())
+    }
+  }
+
   getTileImagePath(tile: Tile): string {
-    if (tile.hasOwnProperty("city") && tile.city instanceof City) {
+    if (tile.hasCity()) {
       return "./assets/unit-city.png";
     }
     if (tile.unit instanceof Settler) {
@@ -105,6 +114,10 @@ export class HomeComponent implements OnInit {
   onBuildCityClick(): void {
     // TODO prevent double click
     this.board.buildCity(this.board.activeTile.coord, this.game.year);
+  }
+
+  onSettleUnitInCityClick(): void {
+    this.board.activeTile = this.board.settleUnitInCity(this.board.activeTile);
   }
 
   /**

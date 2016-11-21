@@ -15,6 +15,7 @@ npm run start.deving
  - Create CityEdit modal component, activated when doubleclicking on a city
  - Introduce Production of units (depending on Cost of a unit and City production per turn)
  - Add css for City Size nr
+ - Start using uuid for units
 
  #EPIC #3 more subtle production/tiletypes
  - Introduce Sea with Fish
@@ -32,6 +33,7 @@ npm run start.deving
  - Allow 2 Settlers to work on the same Work at the same time quicker (reduce finishYear)
  - Land units should be able to move more than one square per turn on road
  - Support Mountains with slower movement
+ - Do not allow City's to be built too close to each other (4 tiles?)
 
 ## Research
  - http://stackoverflow.com/questions/34556277/angular2-table-rows-as-component#34556489

@@ -1,5 +1,6 @@
 import {Board, Coord, Direction, Tile, Game, Land} from "./world";
 import {Settler, Unit, SailBoat, Militia} from "./units";
+import {endTurns} from "./units.spec";
 
 export function main() {
 
@@ -28,6 +29,21 @@ export function main() {
     });
   });
 
+  describe("Board.settleUnitInCity", () => {
+    it("should move a unit from tile to City.units", () => {
+      let currentYear: number = 1;
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3);
+      board.placeUnit(coord, new Settler());
+      board.buildCity(coord, currentYear);
+      endTurns(board, 1);
+      const tile: Tile = board.findTile(coord);
+      board.settleUnitInCity(tile);
+      expect(tile.city.units.length).toEqual(1);
+      expect(tile.unit).toBeNull();
+    });
+  });
+
   describe("Board.buildRoad", () => {
     it("should place a road on a Land Surface if there is a Settler on it", () => {
       let currentYear: number = 1;
@@ -35,8 +51,8 @@ export function main() {
       const coord: Coord = Coord.create(0, 3);
       const tile = board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
-      [2,3,4].forEach((y) => {board.notifyEndTurn(y)});
-      expect(tile.surface.hasRoad).toEqual(true);
+      endTurns(board, 3);
+      expect(tile.surface.hasRoad).toBeTruthy();
     });
     it("should NOT place a road on a Land Surface if there is no Settler on it", () => {
       const currentYear: number = 1;
@@ -45,10 +61,7 @@ export function main() {
       board.placeUnit(coord, new Militia());
       board.buildRoad(coord, currentYear);
       const tile: Tile = board.findTile(coord);
-      expect(tile.surface.hasRoad).toEqual(false);
-    });
-    it("should NOT place a road on a Surface if it has a City", () => {
-      // TODO implement test when turns with movepoints are in place
+      expect(tile.surface.hasRoad).toBeFalsy();
     });
     it("should NOT place a road on a Surface in the same turn", () => {
       // TODO implement test when turns with movepoints are in place
@@ -63,12 +76,20 @@ export function main() {
       board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
       const tile: Tile = board.findTile(coord);
-      expect(tile.surface.hasRoad).toEqual(false);
+      expect(tile.surface.hasRoad).toBeFalsy();
     });
   });
 
   describe("Board.buildCity", () => {
     it("should place a City on a Land Surface if there is a Settler on it", () => {
+      const currentYear: number = 1;
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3); // Land
+      board.placeUnit(coord, new Settler());
+      board.buildCity(coord, currentYear);
+      endTurns(board, 5);
+      const tile: Tile = board.findTile(coord);
+      expect(tile.city.size).toEqual(1);
     });
   });
 
@@ -93,15 +114,14 @@ export function main() {
       const settler = new Settler();
       const tile = board.placeUnit(coord, settler);
       board.buildRoad(coord, currentYear);
-      expect(tile.unit.hasActionLeft()).toEqual(false);
-      //expect(settler.hasActionLeft()).toEqual(false);
+      expect(tile.unit.hasActionLeft()).toBeFalsy();
     });
     it("should return true when it is not working on something", () => {
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
-      expect(settler.hasActionLeft()).toEqual(true);
+      expect(settler.hasActionLeft()).toBeTruthy();
     });
     it("should return false when it has moved in this turn", () => {
       const board: Board = new Board(5);
@@ -109,14 +129,14 @@ export function main() {
       const settler = new Settler();
       board.placeUnit(coord, settler);
       board.moveUnit(board.findTile(coord), Direction.Right);
-      expect(settler.hasActionLeft()).toEqual(false);
+      expect(settler.hasActionLeft()).toBeFalsy();
     });
     it("should return true when it has not moved in this turn", () => {
       const board: Board = new Board(5);
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
-      expect(settler.hasActionLeft()).toEqual(true);
+      expect(settler.hasActionLeft()).toBeTruthy();
     });
   });
 
@@ -140,7 +160,7 @@ export function main() {
       const settler = new Settler();
       board.placeUnit(coord, settler);
       board.buildRoad(coord, currentYear);
-      expect(settler.hasActionLeft()).toEqual(false);
+      expect(settler.hasActionLeft()).toBeFalsy();
       const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
       const oldTile: Tile = board.findTile(coord);
       expect(oldTile).toEqual(newTile);
@@ -153,7 +173,7 @@ export function main() {
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
-      [2,3,4].forEach((y) => {board.notifyEndTurn(y)});
+      endTurns(board, 3);
       const newTile: Tile = board.moveUnit(board.findTile(coord), Direction.Right);
       const oldTile: Tile = board.findTile(coord);
       expect(oldTile.surface.hasRoad).toBe(true);

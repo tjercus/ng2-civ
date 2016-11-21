@@ -10,6 +10,7 @@ export class Unit {
   isAquatic: boolean = false;
   health: number = 100;
   remainingMovePoints: number = 1;
+  // TODO implement 'moves' as moves: number = 1;
 
   constructor() {
     //console.log(`name is ${this.name}`);
@@ -87,6 +88,7 @@ export class City extends Unit {
 }
 
 export class Settler extends Unit {
+  attack: number = 0;
   // TODO perhaps encapsulate into a Work class so all work related properties will be updated atomically
   private workingOn: SettlerWorkType = SettlerWorkType.Nothing;
   private workFinishedInYear: number;
@@ -120,7 +122,7 @@ export class Settler extends Unit {
 
   public onEndTurnNotification(newYear: number): void {
     super.onEndTurnNotification(newYear);
-    console.log(`Unit received onEndTurnNotification new year ${newYear}`);
+    console.log(`Settler received onEndTurnNotification new year ${newYear}`);
     if (this.workFinishedInYear === newYear) {
       if (this.workingOn === SettlerWorkType.City) {
         this.workTile.city = new City();
@@ -142,6 +144,9 @@ export class Settler extends Unit {
 }
 
 export class SailBoat extends Unit {
+  // TODO moves = 3
+  units: Array<Unit> = []; // TODO max 3
+
   constructor() {
     super();
     this.name = "SailBoat";
@@ -158,7 +163,7 @@ export class Militia extends Unit {
 }
 
 class Building {}
-
+// TODO perhaps use enum instead of type with subtypes
 export class Granary extends Building {
   // City uses only 50% of Food for growth.
 }

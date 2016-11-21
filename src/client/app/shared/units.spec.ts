@@ -1,8 +1,11 @@
-import {City, Militia, Granary} from "./units";
+import {City, Militia, Granary, Unit} from "./units";
+import {Board} from "./world";
 
-const endTurn = (city, x) => {
-  for (let i = 0; i < x; i++) {
-    city.onEndTurnNotification(i);
+// TODO move to shared lib
+export const endTurns = (obj: Unit|Board, nrOfTurns: number, startYear: number = 2) => {
+  // [...Array(nrOfTurns).keys()].forEach((y) => {city.onEndTurnNotification(y)});
+  for (let i = startYear; i < (nrOfTurns + startYear); i++) {
+    obj.onEndTurnNotification(i);
   }
 }
 
@@ -16,21 +19,21 @@ export function main() {
     });
     it("should have more food and production after turn ends", () => {
       const city: City = new City();
-      city.onEndTurnNotification(2);
+      endTurns(city, 1);
       expect(city.food).toEqual(1);
       expect(city.production).toEqual(1);
     });
     it("should increase size after turn ends and enough extra food is available", () => {
       const city: City = new City();
       // enough turns to increase size
-      endTurn(city, 10);
+      endTurns(city, 10);
       expect(city.size).toEqual(2);
       expect(city.food).toEqual(0);
     });
     it("should increase size faster when a granary is present", () => {
       const city: City = new City();
       city.buildings.push(new Granary());
-      endTurn(city, 5);
+      endTurns(city, 5);
       expect(city.size).toEqual(2);
       expect(city.food).toEqual(0);
     });
@@ -39,7 +42,7 @@ export function main() {
       const city: City = new City();
       const militia: Militia = new Militia();
       city.units.push(militia);
-      city.onEndTurnNotification(2);
+      endTurns(city, 1);
       expect(city.food).toEqual(0);
     });
     it("should decrease food supplies when a city has two unit settled", () => {
@@ -47,7 +50,7 @@ export function main() {
       const militia: Militia = new Militia();
       const militia2: Militia = new Militia();
       city.units.push(militia, militia2);
-      city.onEndTurnNotification(2);
+      endTurns(city, 1);
       expect(city.food).toEqual(-1);
     });
   });

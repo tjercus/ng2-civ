@@ -19,7 +19,7 @@ export class Game {
   endTurn() {
     this.year++;
     console.log("Game.endTurn, now in year %f", this.year);
-    this.board.notifyEndTurn(this.year);
+    this.board.onEndTurnNotification(this.year);
   }
 }
 
@@ -146,7 +146,7 @@ export class Board {
     return this._tiles.get(coord.valueOf());
   }
 
-  public notifyEndTurn(newYear: number) {
+  public onEndTurnNotification(newYear: number) {
     this._tiles.forEach(_tile => {
       if (_tile.unit) _tile.unit.onEndTurnNotification(newYear);
       if (_tile.city) _tile.city.onEndTurnNotification(newYear);
@@ -167,15 +167,25 @@ export class Board {
     return res;
   }
 
-  private onWorkDoneCb(workType: SettlerWorkType, tile: Tile): void {
-    console.log(`World.onWorkDoneCb called saying ${workType} is done for ${tile}`);
-    console.dir(this._tiles);
-  }
-
-  hasActiveTile(): boolean {
+  public hasActiveTile(): boolean {
     console.log(`Board.hasActiveTile ${this.activeTile instanceof Tile}`);
     return this.activeTile instanceof Tile;
     //return this.activeTile !== undefined && this.activeTile !== null;
+  }
+
+  public settleUnitInCity(tile: Tile): Tile {
+    console.log(`Board.settleUnitInCity ${tile}`);
+    if (tile.hasCity()) {
+      const unit = tile.unit;
+      tile.city.units.push(unit);
+      tile.unit = null;
+    }
+    return tile;
+  }
+
+  private onWorkDoneCb(workType: SettlerWorkType, tile: Tile): void {
+    console.log(`World.onWorkDoneCb called saying ${workType} is done for ${tile}`);
+    console.dir(this._tiles);
   }
 }
 
@@ -282,6 +292,12 @@ export class Tile {
   public toString(): string {
     // TODO use StringBuilder
     return `[${this.coord}] U: ${this.unit || "f"}, R: ${this.surface.hasRoad}, C: ${this.city || "f"}`;
+  }
+  public hasUnit(): boolean {
+    return this.unit !== undefined && this.unit != null && this.unit instanceof Unit;
+  }
+  public hasCity(): boolean {
+    return this.city !== undefined && this.city != null && this.city instanceof City;
   }
 }
 
