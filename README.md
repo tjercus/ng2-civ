@@ -11,7 +11,7 @@ npm run start.deving
 
 ## TODO
  # EPIC #2 City (Flesh out City concept some more)
- - Create CityEdit modal component, activated when doubleclicking on a city
+ - Modify Board Constructor to allow passing in an Array of Tiles
  - Introduce Production of units (depending on Cost of a unit and City production per turn)
  - Add css for City Size nr
  - Start using uuid for units
@@ -40,3 +40,4 @@ npm run start.deving
  - https://github.com/compute-io/chunkify
  - http://civilization.wikia.com/wiki/List_of_units_in_Civ1
  - http://freeciv.wikia.com/wiki/Units
+ - http://vignette1.wikia.nocookie.net/civilization/images/3/36/City_screen_(Civ1).png/revision/latest?cb=20140806051358

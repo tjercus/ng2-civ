@@ -31,7 +31,15 @@
   <button (click)="onBuildCityClick()">build city</button>
 </nav>
 
-<section *ngIf="selectedCity">
+<section *ngIf="selectedCity" id="cityscreen">
   <h2>{{selectedCity.name}} screen</h2>
   <div><label>size: </label>{{selectedCity.size}}</div>
+  <h3>Resources</h3>
+  <h3>Now producing unit or building</h3>
+  <h3>Units</h3>
+  <li *ngFor="let unit of selectedCity.units">
+    {{unit}} <button>ungarrison</button>
+  </li>
+  <h3>Buildings</h3>
+  <button (click)="closeCityscreen()">close</button>
 </section>

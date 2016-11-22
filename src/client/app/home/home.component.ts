@@ -132,4 +132,9 @@ export class HomeComponent implements OnInit {
   onEndTurnClick(): void {
     this.game.endTurn();
   }
+
+  closeCityscreen(): void {
+    // TODO write back to grid
+    this.selectedCity = null;
+  }
 }
