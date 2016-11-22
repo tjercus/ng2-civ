@@ -64,11 +64,25 @@ export function main() {
       expect(tile.surface.hasRoad).toBeFalsy();
     });
     it("should NOT place a road on a Surface in the same turn", () => {
-      // TODO implement test when turns with movepoints are in place
+      let currentYear: number = 1;
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3);
+      const tile = board.placeUnit(coord, new Settler());
+      board.buildRoad(coord, currentYear);
+      expect(tile.surface.hasRoad).toBeFalsy();
     });
+    /*
     it("should NOT place a road on a Land Surface if it has a Road", () => {
-      // TODO implement test when turns with movepoints are in place
+      const currentYear: number = 1;
+      const board: Board = new Board(5);
+      const coord: Coord = Coord.create(0, 3);
+      board.placeUnit(coord, new Settler());
+      board.buildRoad(coord, currentYear);
+      endTurns(board, 3);
+      const tile: Tile = board.findTile(coord);
+      expect(tile.surface.hasRoad).toBeFalsy();
     });
+    */
     it("should NOT place a road on a Sea Surface", () => {
       const currentYear: number = 1;
       const board: Board = new Board(5);

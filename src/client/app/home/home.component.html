@@ -7,7 +7,7 @@
           [ngClass]="setCssClasses(tile)"
           (click)="onSelectTileClick(tile)"
           attr.data-coord="{{tile.coord}}">
-        <!-- // TODO hide image when function return no path -->
+        <!-- // TODO hide image when function returns no path -->
         <img [attr.src]="getTileImagePath(tile)" alt="tile" />
       </td>
     </tr>
@@ -30,3 +30,8 @@
   <button (click)="onBuildRoadClick()">build road</button>
   <button (click)="onBuildCityClick()">build city</button>
 </nav>
+
+<section *ngIf="selectedCity">
+  <h2>{{selectedCity.name}} screen</h2>
+  <div><label>size: </label>{{selectedCity.size}}</div>
+</section>

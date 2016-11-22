@@ -11,13 +11,13 @@ npm run start.deving
 
 ## TODO
  # EPIC #2 City (Flesh out City concept some more)
- - Allow Warrior to settle in city.units via context menu
  - Create CityEdit modal component, activated when doubleclicking on a city
  - Introduce Production of units (depending on Cost of a unit and City production per turn)
  - Add css for City Size nr
  - Start using uuid for units
 
  #EPIC #3 more subtle production/tiletypes
+ - Introduce SettlerWorkType.Irrigation
  - Introduce Sea with Fish
  - Introduce Grass with fertile spots (yellow dots in Civ1)
  - Introduce Forest

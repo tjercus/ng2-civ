@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
   private board: Board = new Board(5); // TODO use as a properly observed angular service?
   public game: Game = new Game(this.board);
 
+  public selectedCity: City = null;
+
   constructor() {}
 
   /**
@@ -90,7 +92,11 @@ export class HomeComponent implements OnInit {
   }
 
   onSelectTileClick(tile: Tile): void {
-    this.board.activeTile = tile;
+    if (tile.hasCity()) {
+      this.selectedCity = tile.city;
+    } else {
+      this.board.activeTile = tile;
+    }
     console.log(`HomeComponent onSelectTileClick ${tile.toString()}`);
   }
 
