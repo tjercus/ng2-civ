@@ -21,6 +21,9 @@ export function miniBoardBuilder(boardSize: number = 5): Map<String, Tile> {
 
 export function csvBoardBuilder(csv: string): Map<String, Tile> {
   let tiles = new Map<String, Tile>();
+  //csv.map(cell => {
+    tiles = setLandTileAt(0, 0, tiles);
+  //});
   return tiles;
 }
 
@@ -28,6 +31,8 @@ export function randomIslandsBoardBuilder(boardSize: number = 50): Map<String, T
   let tiles = new Map<String, Tile>();
   return tiles;
 }
+
+/************************************/
 
 function setSeaTileAt(x: number, y: number, tiles: Map<String, Tile>): Map<String, Tile> {
   return tiles.set(Coord.create(x, y).valueOf(), createSeaTile(x, y));
