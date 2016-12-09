@@ -21,7 +21,7 @@ export function main() {
 
   describe("Board.placeUnit", () => {
     it("should place a Unit on a Coord", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Settler());
       const unit: Unit = board.findTile(coord).unit;
@@ -32,7 +32,7 @@ export function main() {
   describe("Board.settleUnitInCity", () => {
     it("should move a unit from tile to City.units", () => {
       let currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Settler());
       board.buildCity(coord, currentYear);
@@ -47,7 +47,7 @@ export function main() {
   describe("Board.buildRoad", () => {
     it("should place a road on a Land Surface if there is a Settler on it", () => {
       let currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const tile = board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
@@ -56,7 +56,7 @@ export function main() {
     });
     it("should NOT place a road on a Land Surface if there is no Settler on it", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Militia());
       board.buildRoad(coord, currentYear);
@@ -65,7 +65,7 @@ export function main() {
     });
     it("should NOT place a road on a Surface in the same turn", () => {
       let currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const tile = board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
@@ -74,7 +74,7 @@ export function main() {
     /*
     it("should NOT place a road on a Land Surface if it has a Road", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
@@ -85,7 +85,7 @@ export function main() {
     */
     it("should NOT place a road on a Sea Surface", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 0); // Sea
       board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
@@ -97,7 +97,7 @@ export function main() {
   describe("Board.buildCity", () => {
     it("should place a City on a Land Surface if there is a Settler on it", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3); // Land
       board.placeUnit(coord, new Settler());
       board.buildCity(coord, currentYear);
@@ -123,7 +123,7 @@ export function main() {
   describe("Board.hasActionLeft", () => {
     it("should return false when it is working on something", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       const tile = board.placeUnit(coord, settler);
@@ -131,14 +131,14 @@ export function main() {
       expect(tile.unit.hasActionLeft()).toBeFalsy();
     });
     it("should return true when it is not working on something", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
       expect(settler.hasActionLeft()).toBeTruthy();
     });
     it("should return false when it has moved in this turn", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
@@ -146,7 +146,7 @@ export function main() {
       expect(settler.hasActionLeft()).toBeFalsy();
     });
     it("should return true when it has not moved in this turn", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
@@ -156,7 +156,7 @@ export function main() {
 
   describe("Board.moveUnit", () => {
     it("should move a Unit from one Tile to another in a Direction", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Settler());
       const newCoord: Coord = Coord.create(1, 3);
@@ -169,7 +169,7 @@ export function main() {
 
     it("should not move a Unit if it has no actions left", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       const settler = new Settler();
       board.placeUnit(coord, settler);
@@ -183,7 +183,7 @@ export function main() {
 
     it("should keep the road after a move", () => {
       const currentYear: number = 1;
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 3);
       board.placeUnit(coord, new Settler());
       board.buildRoad(coord, currentYear);
@@ -195,7 +195,7 @@ export function main() {
     });
 
     it("should NOT move a Settler from one Land Tile to a Sea Tile", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(0, 2); // Land
       board.placeUnit(coord, new Settler());
       const oldTile: Tile = board.findTile(coord);
@@ -207,7 +207,7 @@ export function main() {
     });
 
     it("should NOT move a SailBoat from one Sea Tile to a Land Tile", () => {
-      const board: Board = new Board(5);
+      const board: Board = new Board();
       const coord: Coord = Coord.create(1, 1); // Sea
       board.placeUnit(coord, new SailBoat());
       const oldTile: Tile = board.findTile(coord);

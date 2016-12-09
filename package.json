@@ -1,9 +1,9 @@
 {
-  "name": "angular2-seed",
-  "version": "0.0.0",
-  "description": "High-quality, modular starter (seed) project for Angular 2 apps with statically typed build and AoT",
+  "name": "ng2-civ",
+  "version": "1.0.0",
+  "description": "Building some parts of the games of civilization with angular2 and TypeScript",
   "repository": {
-    "url": "https://github.com/mgechev/angular2-seed"
+    "url": "https://github.com/tjercus/ng2-civ"
   },
   "scripts": {
     "build.dev": "gulp build.dev --color --config-env dev",
@@ -34,9 +34,10 @@
     "e2e.ci": "gulp build.prod --color && gulp build.js.e2e --color && gulp e2e --color",
     "tests.all": "npm test && npm run e2e.ci",
     "webdriver-start": "webdriver-manager start",
-    "webdriver-update": "webdriver-manager update"
+    "webdriver-update": "webdriver-manager update",
+    "dev": "gulp serve.dev --color"
   },
-  "author": "Minko Gechev <mgechev>",
+  "author": "Tjerk",
   "license": "MIT",
   "devDependencies": {
     "@angular/compiler-cli": "^2.1.0",

@@ -1,4 +1,5 @@
 import {Unit, City, Settler, SailBoat, SettlerWorkType} from "./units";
+import {miniBoardBuilder} from "./boardbuilders";
 
 export class Game {
   //public players: Array<Player> = [];
@@ -31,41 +32,13 @@ export class Game {
 export class Board {
   public _tiles: Map<String, Tile> = new Map<String, Tile>();
   public activeTile: Tile;
-  private boardSize: number;
 
   /**
    * Create a board that is boardSize wide, for now only 1 row is supported
-   * @param {number} boardSize
+   * @param {Map<String, Tile>} tiles
    */
-  constructor(boardSize: number = 5) {
-    this.boardSize = boardSize;
-    // init with Default board
-    for (let i = 0; i < boardSize; i++) {
-      this.setSeaTileAt(i, 0);
-    }
-    for (let j = 0; j < boardSize; j++) {
-      this.setSeaTileAt(j, 1);
-    }
-    for (let k = 0; k < boardSize; k++) {
-      this.setLandTileAt(k, 2);
-    }
-    for (let l = 0; l < boardSize; l++) {
-      this.setLandTileAt(l, 3);
-    }
-  }
-
-  setSeaTileAt(x: number, y: number): void {
-    this._tiles.set(Coord.create(x, y).valueOf(), Board.createSeaTile(x, y));
-  }
-  setLandTileAt(x: number, y: number): void {
-    this._tiles.set(Coord.create(x, y).valueOf(), Board.createLandTile(x, y));
-  }
-
-  static createLandTile(x: number, y: number): Tile {
-    return Tile.create(Coord.create(x, y), new Land());
-  }
-  static createSeaTile(x: number, y: number): Tile {
-    return Tile.create(Coord.create(x, y), new Sea());
+  constructor(tiles?: Map<String, Tile>) {
+    this._tiles = tiles || miniBoardBuilder(5);
   }
 
   /**

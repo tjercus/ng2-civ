@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   public tiles: Array<Tile> = [];
   public grid: Array<Array<Tile>> = [[]];
 
-  private board: Board = new Board(5); // TODO use as a properly observed angular service?
+  private board: Board = new Board();
   public game: Game = new Game(this.board);
 
   public selectedCity: City = null;
