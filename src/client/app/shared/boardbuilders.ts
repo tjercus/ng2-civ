@@ -1,6 +1,13 @@
 
 import {Tile, Coord, Land, Sea} from "./world";
 
+// NOTE: consuming code can calculate the boardwidth and height based on the size of the list/map
+
+/**
+ * Returns 1 dimensional version of a board
+ * @param {number} boardSize
+ * @returns {Map<String, Tile>} 1d collection
+ */
 export function miniBoardBuilder(boardSize: number = 5): Map<String, Tile> {
   let tiles = new Map<String, Tile>();
   for (let i = 0; i < boardSize; i++) {
@@ -19,11 +26,32 @@ export function miniBoardBuilder(boardSize: number = 5): Map<String, Tile> {
   return tiles;
 }
 
+/**
+ * Returns 1 dimensional version of a board
+ * @param {string} csv - with description
+ * @returns {Map<String, Tile>} 1d collection
+ */
 export function csvBoardBuilder(csv: string): Map<String, Tile> {
   let tiles = new Map<String, Tile>();
-  //csv.map(cell => {
-    tiles = setLandTileAt(0, 0, tiles);
-  //});
+  const rows = csv.split("\\n");
+  rows.map((row, rowIndex) => {
+    row.split(",").map((cell, colIndex) => {
+      // TODO typing based on cell symbol
+      switch(cell) {
+        case "l":
+          tiles = setLandTileAt(colIndex, rowIndex, tiles);
+          break;
+        case "s":
+          tiles = setSeaTileAt(colIndex, rowIndex, tiles);
+          break;
+        case "c":
+          // TODO add a city
+          tiles = setLandTileAt(colIndex, rowIndex, tiles);
+          break;
+      }
+
+    });
+  });
   return tiles;
 }
 

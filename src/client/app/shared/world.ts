@@ -34,7 +34,7 @@ export class Board {
   public activeTile: Tile;
 
   /**
-   * Create a board that is boardSize wide, for now only 1 row is supported
+   * Create a board that is boardSize wide
    * @param {Map<String, Tile>} tiles
    */
   constructor(tiles?: Map<String, Tile>) {
